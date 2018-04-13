@@ -6,6 +6,8 @@
         android:icon="@android:drawable/ic_menu_sort_by_size"
         android:label="Minimalist Launcher"
         android:excludeFromRecents="true"
+        android:clearTaskOnLaunch="true"
+        android:stateNotNeeded="true"
         android:theme="@android:style/Theme.Black.NoTitleBar">
 
         <activity android:name=".MainActivity"

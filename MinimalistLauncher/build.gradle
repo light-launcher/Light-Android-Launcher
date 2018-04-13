@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "launcher.simple.com.simplelauncher"
-        minSdkVersion 16
+        minSdkVersion 4
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -12,7 +12,6 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

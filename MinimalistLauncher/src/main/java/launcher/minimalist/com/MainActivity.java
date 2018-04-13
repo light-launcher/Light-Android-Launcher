@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -27,14 +28,21 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        // Setup UI elements
+        listView = new ListView(this);
+        listView.setVerticalScrollBarEnabled(false);
+        listView.setId(android.R.id.list);
+        listView.setDivider(null);
+        setContentView(listView);
+        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) listView.getLayoutParams();
+        p.setMargins(100, 0, 0, 0);
 
         // Get a list of all the apps installed
         packageManager = getPackageManager();
-        adapter = new ArrayAdapter<>(
-                this, R.layout.list_item, new ArrayList<String>());
+        adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_list_item_1, new ArrayList<String>());
         packageNames = new ArrayList<>();
-        listView = findViewById(R.id.listView);
 
         // Tap on an item in the list to launch the app
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -67,7 +75,9 @@ public class MainActivity extends Activity {
     }
 
     private void fetchAppList() {
-        adapter.clear(); // Start from a clean adapter when refreshing the list
+        // Start from a clean adapter when refreshing the list
+        adapter.clear();
+        packageNames.clear();
 
         // Query the package manager for all apps
         List<ResolveInfo> activities = packageManager.queryIntentActivities(
