@@ -50,8 +50,8 @@ public class MainActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     startActivity(packageManager.getLaunchIntentForPackage(packageNames.get(position)));
-                } catch (ActivityNotFoundException e) {
-                    fetchAppList(); // application was uninstalled so update the app list
+                } catch (Exception e) {
+                    fetchAppList();
                 }
             }
         });
