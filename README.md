@@ -1,13 +1,10 @@
-# Min Launcher
-  
+# Light Android Launcher
   
 <p align="center">
 <img src="https://raw.githubusercontent.com/Collinux/minimalist-launcher/master/launcher_main.png" width="230"><br>
-<b>Super lightweight app launcher with a low memory usage and small install size. Lightning fast on any device including support for the first version of Android.</b><br><br>
-</p>
-
-### Philosophy
-  Most modern launchers encourage poor behavioral patterns that grab your attention, leading to constant use of non-productive applications. The objective of a home screen is to enable users to find and launch the apps they need as fast as possible. This launcher goes back to the fundementals of user interation with mobile devices by making the experience quick, simple, and productive.
+  <b>Configurable, super lightweight app launcher with a low memory usage and small install size. Looks a little bit like Light Phone, but you still can run all apps on your device.</b></p>
 
 ### Free & Open Source
-   There are no trackers, no ads, and no device permissions. Peer reviewed code under a GPLv2 license.
+   There are no trackers, no ads, and no device permissions. There is only Open Source Code. 
+   
+   It's a fork of https://github.com/Collinux/minimalist-launcher by Collunux. Created because there is no 'favourite' apps in the main repo.
