@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -133,8 +135,9 @@ public class MainActivity extends Activity {
         List<String> smallAdapter = new ArrayList<>();
         List<String> smallPackageNames = new ArrayList<>();
 
-        AllApps.getActivities(packageManager)
-                .forEach(resolver -> {
+        List<ResolveInfo> activities = AllApps.getActivities(packageManager);
+        activities.sort(Comparator.comparing(pm -> pm.loadLabel(packageManager).toString()));
+        activities.forEach(resolver -> {
                     String appName = (String) resolver.loadLabel(packageManager);
                     if (appName.equals("Minimalist Launcher"))
                         return;
