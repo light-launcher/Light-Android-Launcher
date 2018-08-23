@@ -1,4 +1,4 @@
-package launcher.minimalist.com;
+package com.github.postapczuk.lalauncher;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,16 +14,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import java8.util.Comparators;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static android.R.layout.simple_list_item_1;
 
 public class MainActivity extends Activity {
+
+    private static final String OPT = "opt%s";
 
     private PackageManager packageManager;
     private SharedPreferences preferences;
@@ -31,9 +32,7 @@ public class MainActivity extends Activity {
     private List<String> adapter = new ArrayList<String>();
     private ListView listView;
 
-    private String option1 = "";
-    private String option2 = "";
-    private String option3 = "";
+    private List<String> options = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +40,9 @@ public class MainActivity extends Activity {
         packageManager = getPackageManager();
         preferences = getSharedPreferences("light-phone-launcher", 0);
 
-        option1 = preferences.getString("opt1", "");
-        option2 = preferences.getString("opt2", "");
-        option3 = preferences.getString("opt3", "");
+        for (int i = 0; i < 3; i++) {
+            options.add(preferences.getString(String.format(OPT, Integer.toString(i + 1)), ""));
+        }
 
         prepareListView();
         fetchAppList();
@@ -71,20 +70,25 @@ public class MainActivity extends Activity {
         adapter.clear();
         packageNames.clear();
 
-        List<ComponentName> componentNames = Arrays.asList(
-                getComponentName(Intent.ACTION_DIAL, null),
-                getComponentName(Intent.ACTION_SENDTO, Uri.parse("smsto:")),
-                new ComponentName(option1, option1),
-                new ComponentName(option2, option2),
-                new ComponentName(option3, option3));
+        List<ComponentName> componentNames = new ArrayList<>();
+        componentNames.add(getComponentName(Intent.ACTION_DIAL, null));
+        componentNames.add(getComponentName(Intent.ACTION_SENDTO, Uri.parse("smsto:")));
 
-        adapter = componentNames.stream()
-                .map(this::getLabelName)
-                .collect(Collectors.toList());
+        for (int i = 0; i < 3; i++) {
+            componentNames.add(new ComponentName(options.get(i), options.get(i)));
+        }
 
-        packageNames = componentNames.stream()
-                .map(ComponentName::getPackageName)
-                .collect(Collectors.toList());
+        adapter = new ArrayList<>();
+        for (ComponentName componentName : componentNames) {
+            String labelName = getLabelName(componentName);
+            adapter.add(labelName);
+        }
+
+        packageNames = new ArrayList<>();
+        for (ComponentName componentName : componentNames) {
+            String packageName = componentName.getPackageName();
+            packageNames.add(packageName);
+        }
 
         listView.setAdapter(
                 new ArrayAdapter<String>(
@@ -136,14 +140,15 @@ public class MainActivity extends Activity {
         List<String> smallPackageNames = new ArrayList<>();
 
         List<ResolveInfo> activities = AllApps.getActivities(packageManager);
-        activities.sort(Comparator.comparing(pm -> pm.loadLabel(packageManager).toString()));
-        activities.forEach(resolver -> {
-                    String appName = (String) resolver.loadLabel(packageManager);
-                    if (appName.equals("Minimalist Launcher"))
-                        return;
-                    smallAdapter.add(appName);
-                    smallPackageNames.add(resolver.activityInfo.packageName);
-                });
+        Collections.sort(activities, Comparators.comparing(pm -> pm.loadLabel(packageManager).toString()));
+
+        for (ResolveInfo resolver : activities) {
+            String appName = (String) resolver.loadLabel(packageManager);
+            if (appName.equals("Light Android Launcher"))
+                continue;
+            smallAdapter.add(appName);
+            smallPackageNames.add(resolver.activityInfo.packageName);
+        }
 
         builder.setItems(smallAdapter.toArray(new CharSequence[smallAdapter.size()]), (dialog, which) -> {
             setOption(position, smallPackageNames, which);
@@ -155,22 +160,8 @@ public class MainActivity extends Activity {
 
     private void setOption(int position, List<String> smallPackageNames, int which) {
         String optionPackage = smallPackageNames.get(which);
-        switch (position) {
-            case 2:
-                option1 = optionPackage;
-                preferences.edit().putString("opt1", optionPackage).apply();
-                break;
-            case 3:
-                option2 = optionPackage;
-                preferences.edit().putString("opt2", optionPackage).apply();
-                break;
-            case 4:
-                option3 = optionPackage;
-                preferences.edit().putString("opt3", optionPackage).apply();
-                break;
-            default:
-                throw new UnknownError();
-        }
+        options.set(position - 2, optionPackage);
+        preferences.edit().putString(String.format(OPT, Integer.toString(position - 1)), optionPackage).commit();
     }
 
     private ComponentName getComponentName(String action, Uri data) {

@@ -1,9 +1,10 @@
-package launcher.minimalist.com;
+package com.github.postapczuk.lalauncher;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -70,13 +71,13 @@ public class AllAppsActivity extends Activity {
         packageNames.clear();
 
         // Exclude the settings app and this launcher from the list of apps shown
-        AllApps.getActivities(packageManager).forEach(resolver -> {
+        for (ResolveInfo resolver : AllApps.getActivities(packageManager)) {
             String appName = (String) resolver.loadLabel(packageManager);
-            if (appName.equals("Settings") || appName.equals("Minimalist Launcher"))
-                return;
+            if (appName.equals("Settings") || appName.equals("Light Android Launcher"))
+                continue;
             adapter.add(appName);
             packageNames.add(resolver.activityInfo.packageName);
-        });
+        }
         listView.setAdapter(adapter);
 
         // On Swipe back

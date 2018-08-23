@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="launcher.minimalist.com">
+          xmlns:tools="http://schemas.android.com/tools" package="com.github.postapczuk.lalauncher">
 
     <application
             android:icon="@android:drawable/ic_menu_sort_by_size"
@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AllAppsActivity"
-                  android:parentActivityName=".MainActivity"/>
+                  android:parentActivityName=".MainActivity"
+                  tools:ignore="UnusedAttribute"/>
 
     </application>
 

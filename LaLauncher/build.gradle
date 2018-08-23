@@ -3,8 +3,8 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "launcher.simple.com.simplelauncher"
-        minSdkVersion 24
+        applicationId "com.github.postapczuk.lalauncher"
+        minSdkVersion 4
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -23,5 +23,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    dependencies {
+        compile 'net.sourceforge.streamsupport:streamsupport:1.6.0'
+    }
 }
