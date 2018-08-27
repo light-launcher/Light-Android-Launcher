@@ -1,12 +1,10 @@
 package com.github.postapczuk.lalauncher;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,22 +20,21 @@ import java.util.List;
 
 import static android.R.layout.simple_list_item_1;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppsActivity {
 
     private static final String OPT = "opt%s";
 
-    private PackageManager packageManager;
     private SharedPreferences preferences;
-    private List<String> packageNames = new ArrayList<String>();
-    private List<String> adapter = new ArrayList<String>();
-    private ListView listView;
-
-    private List<String> options = new ArrayList<>();
+    private List<String> options = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         packageManager = getPackageManager();
+
+        // Get a list of all the apps installed
+        adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_list_item_1, new ArrayList<String>());
         preferences = getSharedPreferences("light-phone-launcher", 0);
 
         for (int i = 0; i < 3; i++) {
@@ -78,23 +75,21 @@ public class MainActivity extends Activity {
             componentNames.add(new ComponentName(options.get(i), options.get(i)));
         }
 
-        adapter = new ArrayList<>();
+        List<String> apps = new ArrayList<>();
         for (ComponentName componentName : componentNames) {
             String labelName = getLabelName(componentName);
-            adapter.add(labelName);
+            apps.add(labelName);
         }
-
         packageNames = new ArrayList<>();
         for (ComponentName componentName : componentNames) {
             String packageName = componentName.getPackageName();
             packageNames.add(packageName);
         }
-
-        listView.setAdapter(
-                new ArrayAdapter<String>(
-                        this,
-                        simple_list_item_1,
-                        adapter));
+        adapter = new ArrayAdapter<>(
+                this,
+                simple_list_item_1,
+                apps);
+        listView.setAdapter(adapter);
     }
 
     private void setActions() {
@@ -139,7 +134,7 @@ public class MainActivity extends Activity {
         List<String> smallAdapter = new ArrayList<>();
         List<String> smallPackageNames = new ArrayList<>();
 
-        List<ResolveInfo> activities = AllApps.getActivities(packageManager);
+        List<ResolveInfo> activities = getActivities(packageManager);
         Collections.sort(activities, Comparators.comparing(pm -> pm.loadLabel(packageManager).toString()));
 
         for (ResolveInfo resolver : activities) {

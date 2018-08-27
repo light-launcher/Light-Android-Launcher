@@ -1,9 +1,7 @@
 package com.github.postapczuk.lalauncher;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,16 +13,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class AllAppsActivity extends Activity {
-
-    private PackageManager packageManager;
-    private ArrayList<String> packageNames;
-    private ArrayAdapter<String> adapter;
-    private ListView listView;
+public class AllAppsActivity extends AppsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        packageManager = getPackageManager();
 
         // Setup UI elements
         listView = new ListView(this);
@@ -36,10 +30,8 @@ public class AllAppsActivity extends Activity {
         p.setMargins(100, 0, 0, 0);
 
         // Get a list of all the apps installed
-        packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_list_item_1, new ArrayList<String>());
-        packageNames = new ArrayList<>();
 
         // Tap on an item in the list to launch the app
         listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -71,7 +63,7 @@ public class AllAppsActivity extends Activity {
         packageNames.clear();
 
         // Exclude the settings app and this launcher from the list of apps shown
-        for (ResolveInfo resolver : AllApps.getActivities(packageManager)) {
+        for (ResolveInfo resolver : getActivities(packageManager)) {
             String appName = (String) resolver.loadLabel(packageManager);
             if (appName.equals("Settings") || appName.equals("Light Android Launcher"))
                 continue;

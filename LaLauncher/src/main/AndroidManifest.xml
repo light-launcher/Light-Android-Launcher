@@ -3,13 +3,12 @@
           xmlns:tools="http://schemas.android.com/tools" package="com.github.postapczuk.lalauncher">
 
     <application
-            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:icon="@mipmap/ic_launcher"
             android:label="Light Android Launcher"
             android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"
             android:stateNotNeeded="true"
             android:theme="@android:style/Theme.Black.NoTitleBar">
-
         <activity android:name=".MainActivity"
                   android:launchMode="singleTask">
             <intent-filter>
@@ -22,7 +21,6 @@
         <activity android:name=".AllAppsActivity"
                   android:parentActivityName=".MainActivity"
                   tools:ignore="UnusedAttribute"/>
-
     </application>
 
 </manifest>
