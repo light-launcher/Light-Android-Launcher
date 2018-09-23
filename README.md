@@ -12,7 +12,7 @@
 <p>Inspired by Light Phone, but leaves you access to all apps, by just one swipe.</p>
 
 ### How to use
-<p>Main screen allows you to use 5 apps, 3 of them are configurable, just long press on `EMPTY` item, and choose your favourite app.</p>
+<p>Main screen allows you to use 5 configurable apps, just long press on `EMPTY` item, and choose your favourite app.</p>
 <p>To go to the all-apps view, just swipe left. Long press on that view allows you to read info about app.</p>
 
 ### Free & Open Source
