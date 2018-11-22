@@ -1,5 +1,5 @@
 # Light Android Launcher
-  
+
 <p align="center">
   <img src="https://github.com/postapczuk/Light-Android-Launcher/blob/master/1_main.png" height="600">
   <img src="https://github.com/postapczuk/Light-Android-Launcher/blob/master/4_all_apps.png" height="600">
@@ -12,14 +12,13 @@
 
 
 ### How to use
-<p>Main screen allows you to use 5 configurable apps, just long press on `EMPTY` item, and choose your favourite app.</p>
-<p>To go to the all-apps view, just swipe left. Long press on that view allows you to read info about app.</p>
+<p>Main screen allows you to use 5 configurable apps.</p>
+<p>To go to the all-apps view, just swipe from right to left. Long press on that view allows you to read info about app.</p>
 
 ### Free & Open Source
    No trackers, no ads, and no device permissions. There is only Open Source Code, available on GPLv2 license.
-   
+
    Fork of https://github.com/Collinux/minimalist-launcher by Collunux.
-   
+
 ### Android version
    Works with each Android version from 1.6 (Donut).
-
