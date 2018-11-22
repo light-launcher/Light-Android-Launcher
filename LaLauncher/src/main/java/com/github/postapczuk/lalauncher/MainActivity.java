@@ -150,7 +150,7 @@ public class MainActivity extends AppsActivity {
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(componentName.getPackageName(), 0);
             return packageManager.getApplicationLabel(applicationInfo).toString();
         } catch (Exception e) {
-            return "(EMPTY)";
+            return "Long-press to pick app";
         }
     }
 
