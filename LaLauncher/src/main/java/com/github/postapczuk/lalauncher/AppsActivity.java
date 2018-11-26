@@ -76,7 +76,7 @@ abstract class AppsActivity extends Activity implements Activities {
             } catch (Exception e) {
                 Toast.makeText(
                         AppsActivity.this,
-                        String.format("Error: Couldn't launch app: %s", packageName),
+                        String.format("Couldn't launch %s", packageName),
                         Toast.LENGTH_LONG
                 ).show();
             }
