@@ -113,7 +113,7 @@ public class MainActivity extends AppsActivity {
         List<String> smallPackageNames = new ArrayList<>();
 
         List<ResolveInfo> activities = getActivities(packageManager);
-        Collections.sort(activities, Comparators.comparing(pm -> pm.loadLabel(packageManager).toString()));
+        Collections.sort(activities, Comparators.comparing(pm -> pm.loadLabel(packageManager).toString().toLowerCase()));
 
         for (ResolveInfo resolver : activities) {
             String appName = (String) resolver.loadLabel(packageManager);
