@@ -1,5 +1,9 @@
 # Light Android Launcher
 
+[<img src="https://f-droid.org/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.github.postapczuk.lalauncher/)
+
 <p align="center">
   <img src="https://github.com/postapczuk/Light-Android-Launcher/blob/master/1_main.png" height="600">
   <img src="https://github.com/postapczuk/Light-Android-Launcher/blob/master/4_all_apps.png" height="600">
