@@ -106,7 +106,7 @@ public class MainActivity extends AppsActivity {
     }
 
     private boolean showDialogWithApps(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
         builder.setTitle("Pick an app");
 
         List<String> smallAdapter = new ArrayList<>();
