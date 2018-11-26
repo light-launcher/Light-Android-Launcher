@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static android.R.layout.simple_list_item_1;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static android.view.ViewGroup.LayoutParams.FILL_PARENT;
 
 public class MainActivity extends AppsActivity {
 
@@ -49,13 +49,15 @@ public class MainActivity extends AppsActivity {
         listView = prepareListView();
         setContentView(listView);
 
+        // Set padding for favorite apps list
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) listView.getLayoutParams();
-        layoutParams.leftMargin = 100;
-        layoutParams.height = WRAP_CONTENT;
+        layoutParams.height = FILL_PARENT;
+        listView.setClipToPadding(false);
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         if (wm != null) {
             Display display = wm.getDefaultDisplay();
-            layoutParams.topMargin = (display.getHeight()/2) - (getTotalHeightofListView()/2);
+            GlobalVars.setListPadding((display.getHeight() / 2) - (getTotalHeightofListView() / 2));
+            listView.setPadding(GlobalVars.getListPaddingLeft(), GlobalVars.getListPadding(), 0, 0);
         }
     }
 
@@ -166,5 +168,22 @@ public class MainActivity extends AppsActivity {
         }
         return totalHeight + (listView.getDividerHeight() * (adapter.getCount()));
 
+    }
+
+    public static class GlobalVars {
+        private static int listPadding = 100;
+        private static int listPaddingLeft = 100;
+
+        public static int getListPadding() {
+            return listPadding;
+        }
+
+        public static void setListPadding(int padding) {
+            listPadding = padding;
+        }
+
+        public static int getListPaddingLeft() {
+            return listPaddingLeft;
+        }
     }
 }
