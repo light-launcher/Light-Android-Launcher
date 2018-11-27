@@ -7,6 +7,7 @@
             android:label="Light Android Launcher"
             android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"
+            android:immersive="true"
             android:stateNotNeeded="true"
             android:theme="@android:style/Theme.Black.NoTitleBar">
         <activity android:name=".MainActivity"

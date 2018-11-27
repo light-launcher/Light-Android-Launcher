@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
@@ -56,6 +57,12 @@ public class MainActivity extends AppsActivity {
         if (wm != null) {
             Display display = wm.getDefaultDisplay();
             layoutParams.topMargin = (display.getHeight()/2) - (getTotalHeightofListView()/2);
+        }
+
+        // Dim the system bars (API level 14)
+        // https://developer.android.com/training/system-ui/dim#java
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
         }
     }
 
