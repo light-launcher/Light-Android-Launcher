@@ -9,15 +9,18 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import java8.util.Comparators;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,15 +29,13 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class MainActivity extends AppsActivity {
 
-    private static final String CONTACTS = "contacts";
-    private static final String MESSENGER = "messenger";
-    private static final String OPT = "opt%s";
-    private static final int OPT_COUNT = 3;
+    private static final String FAVS = "favourites";
+    private static final int FAVS_MAX_SIZE = 20;
+    private static final String SEPARATOR = ",,,";
+    private static final String ADD_APPLICATION = "+ add application";
 
     private SharedPreferences preferences;
-    private String contacts = "";
-    private String messenger = "";
-    private List<String> options = new ArrayList<String>(3);
+    private List<String> favourites = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +43,8 @@ public class MainActivity extends AppsActivity {
         packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
         preferences = getSharedPreferences("light-phone-launcher", 0);
-        contacts = preferences.getString(CONTACTS, "");
-        messenger = preferences.getString(MESSENGER, "");
-        for (int i = 0; i < OPT_COUNT; i++) {
-            options.add(preferences.getString(String.format(OPT, Integer.toString(i + 1)), ""));
+        for (int i = 0; i < FAVS_MAX_SIZE; i++) {
+            favourites = Arrays.asList(preferences.getString(FAVS, "").split(SEPARATOR));
         }
         listView = prepareListView();
         setContentView(listView);
@@ -56,7 +55,7 @@ public class MainActivity extends AppsActivity {
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         if (wm != null) {
             Display display = wm.getDefaultDisplay();
-            layoutParams.topMargin = (display.getHeight()/2) - (getTotalHeightofListView()/2);
+            layoutParams.topMargin = (display.getHeight() / 2) - (getTotalHeightofListView() / 2);
         }
 
         // Dim the system bars (API level 14)
@@ -73,18 +72,17 @@ public class MainActivity extends AppsActivity {
 
         List<ComponentName> componentNames = new ArrayList<>();
 
-        componentNames.add(new ComponentName(contacts, contacts));
-        componentNames.add(new ComponentName(messenger, messenger));
-        for (int i = 0; i < OPT_COUNT; i++) {
-            String option = options.get(i);
+        for (String option : favourites) {
             componentNames.add(new ComponentName(option, option));
         }
 
         List<String> apps = new ArrayList<>();
         for (ComponentName componentName : componentNames) {
             String labelName = getLabelName(componentName);
-            apps.add(labelName);
+            if (labelName != null) apps.add(labelName);
         }
+        apps.add(ADD_APPLICATION);
+
         packageNames = new ArrayList<>();
         for (ComponentName componentName : componentNames) {
             String packageName = componentName.getPackageName();
@@ -98,9 +96,32 @@ public class MainActivity extends AppsActivity {
     }
 
     @Override
+    public void onClickHandler(ListView listView) {
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            if (position == packageNames.size() || packageNames.get(position).equals("")) {
+                addFavourite();
+                return;
+            }
+            String packageName = packageNames.get(position);
+            try {
+                startActivity(packageManager.getLaunchIntentForPackage(packageName));
+            } catch (Exception e) {
+                Toast.makeText(
+                        MainActivity.this,
+                        String.format("Error: Couldn't launch app: %s", packageName),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
+    }
+
+    @Override
     public void onLongPressHandler(ListView listView) {
-        listView.setOnItemLongClickListener((parent, view, position, id) ->
-                MainActivity.this.showDialogWithApps(position));
+        listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            Boolean aBoolean = MainActivity.this.removeFavourite(position);
+            MainActivity.this.fetchAppList(listView);
+            return aBoolean;
+        });
     }
 
     @Override
@@ -112,7 +133,7 @@ public class MainActivity extends AppsActivity {
         });
     }
 
-    private boolean showDialogWithApps(int position) {
+    private boolean addFavourite() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
         builder.setTitle("Pick an app");
 
@@ -131,25 +152,23 @@ public class MainActivity extends AppsActivity {
         }
 
         builder.setItems(smallAdapter.toArray(new CharSequence[smallAdapter.size()]), (dialog, which) -> {
-            setOption(position, smallPackageNames, which);
+            setFavourite(smallPackageNames, which);
             fetchAppList(listView);
         });
         builder.show();
         return true;
     }
 
-    private void setOption(int position, List<String> smallPackageNames, int which) {
-        String optionPackage = smallPackageNames.get(which);
-        if (position == 0) {
-            contacts = optionPackage;
-            preferences.edit().putString(CONTACTS, optionPackage).commit();
-        } else if (position == 1) {
-            messenger = optionPackage;
-            preferences.edit().putString(MESSENGER, optionPackage).commit();
-        } else {
-            options.set(position - 2, optionPackage);
-            preferences.edit().putString(String.format(OPT, Integer.toString(position - 1)), optionPackage).commit();
-        }
+    private void setFavourite(List<String> smallPackageNames, int which) {
+        String favouritePackage = smallPackageNames.get(which);
+        packageNames.add(favouritePackage);
+        preferences.edit().putString(FAVS, TextUtils.join(SEPARATOR, packageNames)).commit();
+    }
+
+    private Boolean removeFavourite(int position) {
+        packageNames.remove(position);
+        preferences.edit().putString(FAVS, TextUtils.join(SEPARATOR, packageNames)).commit();
+        return true;
     }
 
     private String getLabelName(ComponentName componentName) {
@@ -157,7 +176,7 @@ public class MainActivity extends AppsActivity {
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(componentName.getPackageName(), 0);
             return packageManager.getApplicationLabel(applicationInfo).toString();
         } catch (Exception e) {
-            return "Long-press to pick app";
+            return null;
         }
     }
 

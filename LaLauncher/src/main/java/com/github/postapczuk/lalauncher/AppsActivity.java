@@ -31,8 +31,8 @@ abstract class AppsActivity extends Activity implements Activities {
 
     ListView prepareListView() {
         ListView newListView = new ListView(this);
-        newListView.setVerticalScrollBarEnabled(false);
         newListView.setId(android.R.id.list);
+        newListView.setVerticalScrollBarEnabled(false);
         newListView.setDivider(null);
         return setActions(newListView);
     }
