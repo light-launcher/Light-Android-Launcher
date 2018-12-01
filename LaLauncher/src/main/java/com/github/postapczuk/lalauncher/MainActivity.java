@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
@@ -59,6 +60,12 @@ public class MainActivity extends AppsActivity {
             GlobalVars.setListPadding((display.getHeight() / 2) - (getTotalHeightofListView() / 2));
             listView.setPadding(GlobalVars.getListPaddingLeft(), GlobalVars.getListPadding(), 0, 0);
         }
+
+        // Dim the system bars (API level 14)
+        // https://developer.android.com/training/system-ui/dim#java
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        }
     }
 
     @Override
@@ -108,14 +115,14 @@ public class MainActivity extends AppsActivity {
     }
 
     private boolean showDialogWithApps(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
         builder.setTitle("Pick an app");
 
         List<String> smallAdapter = new ArrayList<>();
         List<String> smallPackageNames = new ArrayList<>();
 
         List<ResolveInfo> activities = getActivities(packageManager);
-        Collections.sort(activities, Comparators.comparing(pm -> pm.loadLabel(packageManager).toString()));
+        Collections.sort(activities, Comparators.comparing(pm -> pm.loadLabel(packageManager).toString().toLowerCase()));
 
         for (ResolveInfo resolver : activities) {
             String appName = (String) resolver.loadLabel(packageManager);
