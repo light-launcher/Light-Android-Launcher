@@ -57,9 +57,9 @@ public class MainActivity extends AppsActivity {
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         if (wm != null) {
             Display display = wm.getDefaultDisplay();
-            GlobalVars.setListPadding((display.getHeight() / 2) - (getTotalHeightofListView() / 2));
-            GlobalVars.setListPaddingLeft(display.getWidth() / 6);
-            listView.setPadding(GlobalVars.getListPaddingLeft(), GlobalVars.getListPadding(), 0, 0);
+            int heightViewBasedTopPadding = (display.getHeight() / 2) - (getTotalHeightofListView() / 2);
+            int widthViewBasedLeftPadding = (display.getWidth() / 6);
+            listView.setPadding(widthViewBasedLeftPadding, heightViewBasedTopPadding, 0, 0);
         }
 
         // Dim the system bars (API level 14)
@@ -116,7 +116,10 @@ public class MainActivity extends AppsActivity {
     }
 
     private boolean showDialogWithApps(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+        AlertDialog.Builder builder = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+        }
         builder.setTitle("Pick an app");
 
         List<String> smallAdapter = new ArrayList<>();
@@ -175,26 +178,6 @@ public class MainActivity extends AppsActivity {
             totalHeight += view.getMeasuredHeight();
         }
         return totalHeight + (listView.getDividerHeight() * (adapter.getCount()));
-    }
 
-    public static class GlobalVars {
-        private static int listPadding = 100;
-        private static int listPaddingLeft = 100;
-
-        public static int getListPadding() {
-            return listPadding;
-        }
-
-        public static void setListPadding(int padding) {
-            listPadding = padding;
-        }
-
-        public static int getListPaddingLeft() {
-            return listPaddingLeft;
-        }
-
-        public static void setListPaddingLeft(int padding) {
-            listPaddingLeft = padding;
-        }
     }
 }

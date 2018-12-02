@@ -19,7 +19,7 @@ public class AllAppsActivity extends AppsActivity {
         setContentView(listView);
       
         // Set padding for all apps list
-        listView.setPadding(MainActivity.GlobalVars.getListPaddingLeft(), MainActivity.GlobalVars.getListPadding(), 0, MainActivity.GlobalVars.getListPadding());
+        listView.setPadding(PADDING, PADDING, 0, PADDING);
         listView.setClipToPadding(false);
       
         // Dim the system bars (API level 14)
