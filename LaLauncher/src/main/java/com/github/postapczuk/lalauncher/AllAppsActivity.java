@@ -2,6 +2,7 @@ package com.github.postapczuk.lalauncher;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
