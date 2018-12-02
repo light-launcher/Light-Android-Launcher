@@ -3,7 +3,6 @@ package com.github.postapczuk.lalauncher;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -18,9 +17,11 @@ public class AllAppsActivity extends AppsActivity {
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
         listView = prepareListView();
         setContentView(listView);
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) listView.getLayoutParams();
-        layoutParams.leftMargin = 100;
-
+      
+        // Set padding for all apps list
+        listView.setPadding(PADDING, PADDING, 0, PADDING);
+        listView.setClipToPadding(false);
+      
         // Dim the system bars (API level 14)
         // https://developer.android.com/training/system-ui/dim#java
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {

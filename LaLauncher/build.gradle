@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
-
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
-        applicationId "com.github.postapczuk.lalauncher"
+        applicationId 'com.github.postapczuk.lalauncher'
         minSdkVersion 4
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 3
-        versionName "1.2"
+        versionName '1.2'
     }
     buildTypes {
         release {
@@ -15,7 +14,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     lintOptions {
         disable 'MissingTranslation'
     }

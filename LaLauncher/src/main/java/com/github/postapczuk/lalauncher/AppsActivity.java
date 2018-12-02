@@ -19,6 +19,8 @@ import java.util.List;
 
 abstract class AppsActivity extends Activity implements Activities {
 
+    static final int PADDING = 100;
+
     PackageManager packageManager;
     ArrayList<String> packageNames = new ArrayList<>();
     ArrayAdapter<String> adapter;

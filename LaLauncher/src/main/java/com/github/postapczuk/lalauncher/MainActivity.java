@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static android.R.layout.simple_list_item_1;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static android.view.ViewGroup.LayoutParams.FILL_PARENT;
 
 public class MainActivity extends AppsActivity {
 
@@ -50,16 +50,16 @@ public class MainActivity extends AppsActivity {
         setContentView(listView);
 
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) listView.getLayoutParams();
-        layoutParams.leftMargin = 100;
-        layoutParams.height = WRAP_CONTENT;
+        layoutParams.height = FILL_PARENT;
+        listView.setClipToPadding(false);
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         if (wm != null) {
             Display display = wm.getDefaultDisplay();
-            layoutParams.topMargin = (display.getHeight() / 2) - (getTotalHeightofListView() / 2);
+            int heightViewBasedTopPadding = (display.getHeight() / 2) - (getTotalHeightofListView() / 2);
+            int widthViewBasedLeftPadding = (display.getWidth() / 6);
+            listView.setPadding(widthViewBasedLeftPadding, heightViewBasedTopPadding, 0, 0);
         }
 
-        // Dim the system bars (API level 14)
-        // https://developer.android.com/training/system-ui/dim#java
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
         }
@@ -134,7 +134,10 @@ public class MainActivity extends AppsActivity {
     }
 
     private boolean addFavourite() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+        AlertDialog.Builder builder = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+        }
         builder.setTitle("Pick an app");
 
         List<String> smallAdapter = new ArrayList<>();
