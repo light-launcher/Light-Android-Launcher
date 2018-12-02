@@ -1,10 +1,7 @@
 package com.github.postapczuk.lalauncher;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -15,18 +12,7 @@ public class AllAppsActivity extends AppsActivity {
         super.onCreate(savedInstanceState);
         packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
-        listView = prepareListView();
-        setContentView(listView);
-      
-        // Set padding for all apps list
-        listView.setPadding(PADDING, PADDING, 0, PADDING);
-        listView.setClipToPadding(false);
-      
-        // Dim the system bars (API level 14)
-        // https://developer.android.com/training/system-ui/dim#java
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-        }
+        createNewListView();
     }
 
     @Override
@@ -36,7 +22,7 @@ public class AllAppsActivity extends AppsActivity {
     }
 
     @Override
-    public void onSwipeHandler(ListView listView) {
+    public void onSwipeHandler() {
         listView.setOnTouchListener(new OnSwipeTouchListener(AllAppsActivity.this) {
             public void onSwipeRight() {
                 onBackPressed();

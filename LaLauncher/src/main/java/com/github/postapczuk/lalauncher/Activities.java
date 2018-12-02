@@ -1,13 +1,11 @@
 package com.github.postapczuk.lalauncher;
 
-import android.widget.ListView;
-
 interface Activities {
-    void fetchAppList(ListView listView);
+    void fetchAppList();
 
-    void onClickHandler(ListView listView);
+    void onClickHandler();
 
-    void onLongPressHandler(ListView listView);
+    void onLongPressHandler();
 
-    void onSwipeHandler(ListView listView);
+    void onSwipeHandler();
 }

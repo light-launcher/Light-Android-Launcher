@@ -2,20 +2,13 @@ package com.github.postapczuk.lalauncher;
 
 import android.app.AlertDialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Display;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 import java8.util.Comparators;
 
@@ -25,12 +18,10 @@ import java.util.Collections;
 import java.util.List;
 
 import static android.R.layout.simple_list_item_1;
-import static android.view.ViewGroup.LayoutParams.FILL_PARENT;
 
 public class MainActivity extends AppsActivity {
 
     private static final String FAVS = "favourites";
-    private static final int FAVS_MAX_SIZE = 20;
     private static final String SEPARATOR = ",,,";
     private static final String ADD_APPLICATION = "+ add application";
 
@@ -42,31 +33,11 @@ public class MainActivity extends AppsActivity {
         super.onCreate(savedInstanceState);
         packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
-        preferences = getSharedPreferences("light-phone-launcher", 0);
-        for (int i = 0; i < FAVS_MAX_SIZE; i++) {
-            favourites = Arrays.asList(preferences.getString(FAVS, "").split(SEPARATOR));
-        }
-        listView = prepareListView();
-        setContentView(listView);
-
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) listView.getLayoutParams();
-        layoutParams.height = FILL_PARENT;
-        listView.setClipToPadding(false);
-        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        if (wm != null) {
-            Display display = wm.getDefaultDisplay();
-            int heightViewBasedTopPadding = (display.getHeight() / 2) - (getTotalHeightofListView() / 2);
-            int widthViewBasedLeftPadding = (display.getWidth() / 6);
-            listView.setPadding(widthViewBasedLeftPadding, heightViewBasedTopPadding, 0, 0);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-        }
+        loadListView();
     }
 
     @Override
-    public void fetchAppList(ListView listView) {
+    public void fetchAppList() {
         adapter.clear();
         packageNames.clear();
 
@@ -78,7 +49,7 @@ public class MainActivity extends AppsActivity {
 
         List<String> apps = new ArrayList<>();
         for (ComponentName componentName : componentNames) {
-            String labelName = getLabelName(componentName);
+            String labelName = getApplicationLabel(componentName);
             if (labelName != null) apps.add(labelName);
         }
         apps.add(ADD_APPLICATION);
@@ -96,10 +67,10 @@ public class MainActivity extends AppsActivity {
     }
 
     @Override
-    public void onClickHandler(ListView listView) {
+    public void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             if (position == packageNames.size() || packageNames.get(position).equals("")) {
-                addFavourite();
+                showFavouriteModal();
                 return;
             }
             String packageName = packageNames.get(position);
@@ -116,16 +87,15 @@ public class MainActivity extends AppsActivity {
     }
 
     @Override
-    public void onLongPressHandler(ListView listView) {
+    public void onLongPressHandler() {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
-            Boolean aBoolean = MainActivity.this.removeFavourite(position);
-            MainActivity.this.fetchAppList(listView);
-            return aBoolean;
+            this.removeFavourite(position);
+            return true;
         });
     }
 
     @Override
-    public void onSwipeHandler(ListView listView) {
+    public void onSwipeHandler() {
         listView.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
             public void onSwipeLeft() {
                 startActivity(new Intent(getBaseContext(), AllAppsActivity.class));
@@ -133,7 +103,16 @@ public class MainActivity extends AppsActivity {
         });
     }
 
-    private boolean addFavourite() {
+    private void loadFavouritesFromPreferences() {
+        preferences = getSharedPreferences("light-phone-launcher", 0);
+        favourites = Arrays.asList(preferences.getString(FAVS, "").split(SEPARATOR));
+        if (favourites.size() == 1 && favourites.get(0) == "") {
+            favourites = new ArrayList<>();
+        }
+    }
+
+
+    private void showFavouriteModal() {
         AlertDialog.Builder builder = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
@@ -156,44 +135,42 @@ public class MainActivity extends AppsActivity {
 
         builder.setItems(smallAdapter.toArray(new CharSequence[smallAdapter.size()]), (dialog, which) -> {
             setFavourite(smallPackageNames, which);
-            fetchAppList(listView);
+            fetchAppList();
         });
         builder.show();
-        return true;
     }
 
     private void setFavourite(List<String> smallPackageNames, int which) {
-        String favouritePackage = smallPackageNames.get(which);
-        packageNames.add(favouritePackage);
-        preferences.edit().putString(FAVS, TextUtils.join(SEPARATOR, packageNames)).commit();
+        packageNames.add(smallPackageNames.get(which));
+        updateFavouritesInPreferences();
+        loadListView();
     }
 
-    private Boolean removeFavourite(int position) {
+    private void removeFavourite(int position) {
         packageNames.remove(position);
-        preferences.edit().putString(FAVS, TextUtils.join(SEPARATOR, packageNames)).commit();
-        return true;
+        updateFavouritesInPreferences();
+        loadListView();
     }
 
-    private String getLabelName(ComponentName componentName) {
+    private void updateFavouritesInPreferences() {
+        if (packageNames.isEmpty()) {
+            preferences.edit().putString(FAVS, "").commit();
+        } else {
+            preferences.edit().putString(FAVS, TextUtils.join(SEPARATOR, packageNames)).commit();
+        }
+    }
+
+    private void loadListView() {
+        loadFavouritesFromPreferences();
+        createNewListView();
+    }
+
+    private String getApplicationLabel(ComponentName componentName) {
         try {
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(componentName.getPackageName(), 0);
             return packageManager.getApplicationLabel(applicationInfo).toString();
         } catch (Exception e) {
             return null;
         }
-    }
-
-    private int getTotalHeightofListView() {
-        int totalHeight = 0;
-        for (int i = 0; i < adapter.getCount(); i++) {
-            View view = adapter.getView(i, null, listView);
-            view.measure(
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-            );
-            totalHeight += view.getMeasuredHeight();
-        }
-        return totalHeight + (listView.getDividerHeight() * (adapter.getCount()));
-
     }
 }
