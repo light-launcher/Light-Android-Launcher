@@ -58,6 +58,7 @@ public class MainActivity extends AppsActivity {
         if (wm != null) {
             Display display = wm.getDefaultDisplay();
             GlobalVars.setListPadding((display.getHeight() / 2) - (getTotalHeightofListView() / 2));
+            GlobalVars.setListPaddingLeft(display.getWidth() / 6);
             listView.setPadding(GlobalVars.getListPaddingLeft(), GlobalVars.getListPadding(), 0, 0);
         }
 
@@ -174,7 +175,6 @@ public class MainActivity extends AppsActivity {
             totalHeight += view.getMeasuredHeight();
         }
         return totalHeight + (listView.getDividerHeight() * (adapter.getCount()));
-
     }
 
     public static class GlobalVars {
@@ -191,6 +191,10 @@ public class MainActivity extends AppsActivity {
 
         public static int getListPaddingLeft() {
             return listPaddingLeft;
+        }
+
+        public static void setListPaddingLeft(int padding) {
+            listPaddingLeft = padding;
         }
     }
 }
