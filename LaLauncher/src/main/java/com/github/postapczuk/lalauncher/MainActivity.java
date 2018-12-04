@@ -163,7 +163,7 @@ public class MainActivity extends AppsActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
         }
-        builder.setTitle("Pick an app");
+        builder.setTitle("Add favorite app");
 
         List<String> smallAdapter = new ArrayList<>();
         List<String> smallPackageNames = new ArrayList<>();
