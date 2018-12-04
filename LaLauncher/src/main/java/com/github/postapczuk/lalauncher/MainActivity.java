@@ -23,7 +23,7 @@ public class MainActivity extends AppsActivity {
 
     private static final String FAVS = "favourites";
     private static final String SEPARATOR = ",,,";
-    private static final String ADD_APPLICATION = "+ add application";
+    private static final String ADD_APPLICATION = "+ Add favorite app";
 
     private SharedPreferences preferences;
     private List<String> favourites = new ArrayList<String>();
