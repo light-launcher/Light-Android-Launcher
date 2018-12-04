@@ -125,7 +125,7 @@ public class MainActivity extends AppsActivity {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
         }
-        builder.setTitle("Pick an app");
+        builder.setTitle("Add favorite app");
 
         List<String> smallAdapter = new ArrayList<>();
         List<String> smallPackageNames = new ArrayList<>();
