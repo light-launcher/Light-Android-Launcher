@@ -5,8 +5,8 @@
      height="80">](https://f-droid.org/packages/com.github.postapczuk.lalauncher/)
 
 <p align="center">
-  <img src="https://github.com/postapczuk/Light-Android-Launcher/blob/master/Screenshot_20181202-225801.png” height="600"/>
-  <img src="https://github.com/postapczuk/Light-Android-Launcher/blob/master/Screenshot_20181202-225806.png" height="600"/>
+  <img src="https://github.com/postapczuk/Light-Android-Launcher/blob/master/Screenshot_20181202-225801.png?raw=true” height="600"/>
+  <img src="https://github.com/postapczuk/Light-Android-Launcher/blob/master/Screenshot_20181202-225806.png?raw=true" height="600"/>
 </p>
 
 
