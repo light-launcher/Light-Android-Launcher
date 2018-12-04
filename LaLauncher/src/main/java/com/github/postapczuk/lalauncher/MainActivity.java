@@ -24,6 +24,7 @@ public class MainActivity extends AppsActivity {
     private static final String FAVS = "favorites";
     private static final String SEPARATOR = ",,,";
     private static final String ADD_APPLICATION = "+ Add favorite app";
+    private static final String ADD_APPLICATION_SHORT = "+";
 
     private SharedPreferences preferences;
     private List<String> favourites = new ArrayList<String>();
@@ -52,7 +53,14 @@ public class MainActivity extends AppsActivity {
             String labelName = getApplicationLabel(componentName);
             if (labelName != null) apps.add(labelName);
         }
-        apps.add(ADD_APPLICATION);
+
+        // Show "+ Add favorite app" on initial run
+        // Shorten to "+" when any favorite is set
+        if(apps.size() > 0) {
+            apps.add(ADD_APPLICATION_SHORT);
+        } else {
+            apps.add(ADD_APPLICATION);
+        }
 
         packageNames = new ArrayList<>();
         for (ComponentName componentName : componentNames) {
