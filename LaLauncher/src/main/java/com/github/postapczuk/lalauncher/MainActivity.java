@@ -147,9 +147,11 @@ public class MainActivity extends AppsActivity {
     }
 
     private void removeFavourite(int position) {
-        packageNames.remove(position);
-        updateFavouritesInPreferences();
-        loadListView();
+        if (position < packageNames.size()) {
+            packageNames.remove(position);
+            updateFavouritesInPreferences();
+            loadListView();
+        }
     }
 
     private void updateFavouritesInPreferences() {
