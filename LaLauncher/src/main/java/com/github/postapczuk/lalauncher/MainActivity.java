@@ -1,13 +1,19 @@
 package com.github.postapczuk.lalauncher;
 
+import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.transition.Slide;
+import android.view.Gravity;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import java8.util.Comparators;
@@ -28,9 +34,15 @@ public class MainActivity extends AppsActivity {
     private SharedPreferences preferences;
     private List<String> favourites = new ArrayList<String>();
 
+    @SuppressLint("RtlHardcoded")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+            this.getWindow().setEnterTransition(new Slide(Gravity.RIGHT));
+            this.getWindow().setExitTransition(new Slide(Gravity.LEFT));
+        }
         packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
         loadListView();
@@ -96,9 +108,19 @@ public class MainActivity extends AppsActivity {
 
     @Override
     public void onSwipeHandler() {
-        listView.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+        MainActivity mainActivity = this;
+        listView.setOnTouchListener(new OnSwipeTouchListener(mainActivity) {
             public void onSwipeLeft() {
-                startActivity(new Intent(getBaseContext(), AllAppsActivity.class));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(
+                            new Intent(getBaseContext(), AllAppsActivity.class),
+                            ActivityOptions.makeSceneTransitionAnimation(mainActivity).toBundle()
+                    );
+                } else {
+                    startActivity(
+                            new Intent(getBaseContext(), AllAppsActivity.class)
+                    );
+                }
             }
         });
     }
@@ -113,9 +135,9 @@ public class MainActivity extends AppsActivity {
 
 
     private void showFavouriteModal() {
-        AlertDialog.Builder builder = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
         }
         builder.setTitle("Pick an app");
 
