@@ -28,7 +28,6 @@ public class AllAppsActivity extends AppsActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
