@@ -24,6 +24,7 @@ public class AllAppsActivity extends AppsActivity {
         packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
         createNewListView();
+        setTaskBarTransparent();
     }
 
     @Override

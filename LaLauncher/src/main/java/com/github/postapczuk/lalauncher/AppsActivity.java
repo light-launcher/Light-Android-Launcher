@@ -39,7 +39,6 @@ abstract class AppsActivity extends Activity implements Activities {
         listView.setVerticalScrollBarEnabled(false);
         listView.setDivider(null);
         setActions();
-        setTaskBarTransparent();
         applyPadding();
         setContentView(listView);
     }
@@ -118,6 +117,13 @@ abstract class AppsActivity extends Activity implements Activities {
         }
     }
 
+    void setTaskBarTransparent() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        }
+    }
+
     private int getTotalHeightOfListView() {
         int totalHeight = 0;
         for (int i = 0; i < adapter.getCount(); i++) {
@@ -129,11 +135,5 @@ abstract class AppsActivity extends Activity implements Activities {
             totalHeight += view.getMeasuredHeight();
         }
         return totalHeight + (listView.getDividerHeight() * (adapter.getCount()));
-    }
-
-    private void setTaskBarTransparent() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-        }
     }
 }
