@@ -9,7 +9,7 @@
             android:clearTaskOnLaunch="true"
             android:immersive="true"
             android:stateNotNeeded="true"
-            android:theme="@android:style/Theme.Black.NoTitleBar">
+            android:theme="@android:style/Theme.Black.NoTitleBar" tools:ignore="UnusedAttribute">
         <activity android:name=".MainActivity"
                   android:launchMode="singleTask">
             <intent-filter>
@@ -20,8 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AllAppsActivity"
-                  android:parentActivityName=".MainActivity"
-                  tools:ignore="UnusedAttribute"/>
+                  android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
