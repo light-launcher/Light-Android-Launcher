@@ -7,14 +7,19 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.transition.Slide;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 import java8.util.Comparators;
 
@@ -29,7 +34,7 @@ public class MainActivity extends AppsActivity {
 
     private static final String FAVS = "favourites";
     private static final String SEPARATOR = ",,,";
-    private static final String ADD_APPLICATION = "+ add application";
+    private static final String ADD_APPLICATION = "+ add favourite app";
 
     private SharedPreferences preferences;
     private List<String> favourites = new ArrayList<String>();
@@ -44,7 +49,20 @@ public class MainActivity extends AppsActivity {
             this.getWindow().setExitTransition(new Slide(Gravity.LEFT));
         }
         packageManager = getPackageManager();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
+        adapter = new ArrayAdapter<String>(this, simple_list_item_1, new ArrayList<String>()) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text = view.findViewById(android.R.id.text1);
+
+                if (position == getCount() - 1 && position != 0) {
+                    text.setTextColor(Color.rgb(80, 80, 80));
+                }
+
+                return view;
+            }
+        };
         loadListView();
     }
 
@@ -61,9 +79,9 @@ public class MainActivity extends AppsActivity {
 
         List<String> apps = new ArrayList<>();
         for (ComponentName componentName : componentNames) {
-            String labelName = getApplicationLabel(componentName);
-            if (labelName != null) apps.add(labelName);
+            apps.add(getApplicationLabel(componentName));
         }
+
         apps.add(ADD_APPLICATION);
 
         packageNames = new ArrayList<>();
@@ -71,10 +89,9 @@ public class MainActivity extends AppsActivity {
             String packageName = componentName.getPackageName();
             packageNames.add(packageName);
         }
-        adapter = new ArrayAdapter<>(
-                this,
-                simple_list_item_1,
-                apps);
+        for (String app : apps) {
+            adapter.add(app);
+        }
         listView.setAdapter(adapter);
     }
 
@@ -193,8 +210,8 @@ public class MainActivity extends AppsActivity {
         try {
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(componentName.getPackageName(), 0);
             return packageManager.getApplicationLabel(applicationInfo).toString();
-        } catch (Exception e) {
-            return null;
+        } catch (PackageManager.NameNotFoundException e) {
+            return "Uninstalled app";
         }
     }
 }

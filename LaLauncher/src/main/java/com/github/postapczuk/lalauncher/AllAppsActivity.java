@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
+import static android.R.layout.simple_list_item_1;
+
 public class AllAppsActivity extends AppsActivity {
 
     @SuppressLint("RtlHardcoded")
@@ -22,7 +24,7 @@ public class AllAppsActivity extends AppsActivity {
             this.getWindow().setExitTransition(new Slide(Gravity.LEFT));
         }
         packageManager = getPackageManager();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
+        adapter = new ArrayAdapter<String>(this, simple_list_item_1, new ArrayList<String>());
         createNewListView();
         setTaskBarTransparent();
     }
@@ -39,6 +41,7 @@ public class AllAppsActivity extends AppsActivity {
     public void onSwipeHandler() {
         listView.setOnTouchListener(new OnSwipeTouchListener(AllAppsActivity.this) {
             public void onSwipeRight() {
+                listView.cancelLongPress();
                 onBackPressed();
             }
         });

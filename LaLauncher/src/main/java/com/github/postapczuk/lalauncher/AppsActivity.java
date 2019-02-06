@@ -102,7 +102,7 @@ abstract class AppsActivity extends Activity implements Activities {
         });
     }
 
-    void applyPadding() {
+    private void applyPadding() {
         listView.setClipToPadding(false);
         WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         if (windowManager != null) {
@@ -110,7 +110,7 @@ abstract class AppsActivity extends Activity implements Activities {
             final int displayHeight = display.getHeight();
             int heightViewBasedTopPadding = displayHeight / 6;
             if (getTotalHeightOfListView() < displayHeight - displayHeight / 6) {
-                heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView() / 2);
+                heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView() / 2) + displayHeight / 15;
             }
             int widthViewBasedLeftPadding = (display.getWidth() / 6);
             listView.setPadding(widthViewBasedLeftPadding, heightViewBasedTopPadding, 0, 0);
