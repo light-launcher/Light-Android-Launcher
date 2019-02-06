@@ -109,8 +109,8 @@ abstract class AppsActivity extends Activity implements Activities {
             Display display = windowManager.getDefaultDisplay();
             final int displayHeight = display.getHeight();
             int heightViewBasedTopPadding = displayHeight / 6;
-            if (getTotalHeightOfListView() < displayHeight - displayHeight / 6) {
-                heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView() / 2) + displayHeight / 15;
+            if (getTotalHeightOfListView() < displayHeight - heightViewBasedTopPadding) {
+                heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView() / 2);
             }
             int widthViewBasedLeftPadding = (display.getWidth() / 6);
             listView.setPadding(widthViewBasedLeftPadding, heightViewBasedTopPadding, 0, 0);
@@ -126,7 +126,7 @@ abstract class AppsActivity extends Activity implements Activities {
 
     private int getTotalHeightOfListView() {
         int totalHeight = 0;
-        for (int i = 0; i < adapter.getCount(); i++) {
+        for (int i = 0; i < adapter.getCount() - 1; i++) {
             View view = adapter.getView(i, null, listView);
             view.measure(
                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
