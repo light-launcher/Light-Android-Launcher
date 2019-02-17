@@ -40,6 +40,7 @@ abstract class AppsActivity extends Activity implements Activities {
         listView.setDivider(null);
         setActions();
         applyPadding();
+        listView.setSelector(android.R.color.transparent);
         setContentView(listView);
     }
 
