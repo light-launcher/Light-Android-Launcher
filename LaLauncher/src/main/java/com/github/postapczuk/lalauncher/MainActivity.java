@@ -9,9 +9,9 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.transition.Slide;
 import android.view.Gravity;
@@ -56,8 +56,12 @@ public class MainActivity extends AppsActivity {
                 View view = super.getView(position, convertView, parent);
                 TextView text = view.findViewById(android.R.id.text1);
 
+                // Prevents the color of the text changing on click
+                text.setTextColor(getResources().getColor(R.color.colorPrimary));
+                text.setHighlightColor(getResources().getColor(R.color.colorPrimary));
+
                 if (position == getCount() - 1 && position != 0) {
-                    text.setTextColor(Color.rgb(80, 80, 80));
+                    text.setTextColor(getResources().getColor(R.color.colorUnderstate));
                 }
 
                 return view;
@@ -98,6 +102,12 @@ public class MainActivity extends AppsActivity {
     @Override
     public void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
+            TextView selectedItem = view.findViewById(view.getId());
+            selectedItem.setBackgroundResource(R.drawable.underline);
+
+            // Remove underline from selected item after a delay
+            new Handler().postDelayed(() -> selectedItem.setBackgroundResource(0), 350);
+
             if (position == packageNames.size() || packageNames.get(position).equals("")) {
                 showFavouriteModal();
                 return;
@@ -149,7 +159,6 @@ public class MainActivity extends AppsActivity {
             favourites = new ArrayList<>();
         }
     }
-
 
     private void showFavouriteModal() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

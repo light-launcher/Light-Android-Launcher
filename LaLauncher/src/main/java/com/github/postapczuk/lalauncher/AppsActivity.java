@@ -9,12 +9,14 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ abstract class AppsActivity extends Activity implements Activities {
         listView.setId(android.R.id.list);
         listView.setVerticalScrollBarEnabled(false);
         listView.setDivider(null);
+        listView.setSelector(R.color.colorTransparent);
         setActions();
         applyPadding();
         setContentView(listView);
@@ -75,6 +78,21 @@ abstract class AppsActivity extends Activity implements Activities {
 
     public void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
+            TextView selectedItem = view.findViewById(view.getId());
+
+            // Setting the background resource changes the padding values
+            // so we have to reset them after changing the background resource
+            final int paddingBottom = selectedItem.getTotalPaddingBottom();
+            final int paddingLeft = selectedItem.getTotalPaddingLeft();
+            final int paddingRight = selectedItem.getTotalPaddingRight();
+            final int paddingTop = selectedItem.getTotalPaddingTop();
+
+            selectedItem.setBackgroundResource(R.drawable.underline);
+            selectedItem.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+
+            // Remove underline from selected item
+            new Handler().postDelayed(() -> selectedItem.setBackgroundResource(0), 350);
+
             String packageName = packageNames.get(position);
             try {
                 startActivity(packageManager.getLaunchIntentForPackage(packageName));
@@ -91,6 +109,12 @@ abstract class AppsActivity extends Activity implements Activities {
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public void onLongPressHandler() {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            TextView selectedItem = view.findViewById(view.getId());
+            selectedItem.setBackgroundResource(R.drawable.underline);
+
+            // Remove underline from selected item after a delay
+            new Handler().postDelayed(() -> selectedItem.setBackgroundResource(0), 350);
+
             try {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 intent.setData(Uri.parse("package:" + packageNames.get(position)));
@@ -112,8 +136,9 @@ abstract class AppsActivity extends Activity implements Activities {
             if (getTotalHeightOfListView() < displayHeight - heightViewBasedTopPadding) {
                 heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView() / 2);
             }
-            int widthViewBasedLeftPadding = (display.getWidth() / 6);
-            listView.setPadding(widthViewBasedLeftPadding, heightViewBasedTopPadding, 0, 0);
+            int widthViewBasedSidePadding = (display.getWidth() / 6);
+
+            listView.setPadding(widthViewBasedSidePadding, heightViewBasedTopPadding, widthViewBasedSidePadding, 0);
         }
     }
 

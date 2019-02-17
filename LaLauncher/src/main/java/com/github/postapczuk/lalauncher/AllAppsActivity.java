@@ -5,8 +5,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.transition.Slide;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -24,7 +27,20 @@ public class AllAppsActivity extends AppsActivity {
             this.getWindow().setExitTransition(new Slide(Gravity.LEFT));
         }
         packageManager = getPackageManager();
-        adapter = new ArrayAdapter<String>(this, simple_list_item_1, new ArrayList<String>());
+        adapter = new ArrayAdapter<String>(this, simple_list_item_1, new ArrayList<String>()) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text = view.findViewById(android.R.id.text1);
+
+                // Prevents the color of the text changing on click
+                text.setTextColor(getResources().getColor(R.color.colorPrimary));
+                text.setHighlightColor(getResources().getColor(R.color.colorPrimary));
+
+                return view;
+            }
+        };
         createNewListView();
         setTaskBarTransparent();
     }
