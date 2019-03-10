@@ -196,7 +196,7 @@ public class MainActivity extends AppsActivity {
     private void loadListView() {
         loadFavouritesFromPreferences();
         createNewListView();
-        listView.setBackgroundColor(Color.argb(150, 0, 0, 0));
+        listView.setBackgroundColor(Color.argb(200, 0, 0, 0));
     }
 
     private String getApplicationLabel(ComponentName componentName) {
