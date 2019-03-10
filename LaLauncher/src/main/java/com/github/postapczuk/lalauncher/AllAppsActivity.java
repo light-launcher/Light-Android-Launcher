@@ -3,8 +3,6 @@ package com.github.postapczuk.lalauncher;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
-import android.transition.Slide;
-import android.view.Gravity;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 
@@ -20,8 +18,6 @@ public class AllAppsActivity extends AppsActivity {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-            this.getWindow().setEnterTransition(new Slide(Gravity.RIGHT));
-            this.getWindow().setExitTransition(new Slide(Gravity.LEFT));
         }
         packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(this, simple_list_item_1, new ArrayList<String>());
@@ -32,15 +28,12 @@ public class AllAppsActivity extends AppsActivity {
     @Override
     public void onBackPressed() {
         finish();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-        }
     }
 
     @Override
     public void onSwipeHandler() {
         listView.setOnTouchListener(new OnSwipeTouchListener(AllAppsActivity.this) {
-            public void onSwipeRight() {
+            public void onSwipeBottom() {
                 listView.cancelLongPress();
                 onBackPressed();
             }

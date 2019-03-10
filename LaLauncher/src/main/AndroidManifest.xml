@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools" package="com.github.postapczuk.lalauncher">
-
     <application
             android:icon="@mipmap/ic_launcher"
             android:label="Light Android Launcher"
@@ -22,5 +21,4 @@
         <activity android:name=".AllAppsActivity"
                   android:parentActivityName=".MainActivity"/>
     </application>
-
 </manifest>

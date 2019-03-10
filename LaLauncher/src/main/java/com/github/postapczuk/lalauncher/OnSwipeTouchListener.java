@@ -2,16 +2,14 @@ package com.github.postapczuk.lalauncher;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 
 public class OnSwipeTouchListener implements View.OnTouchListener {
 
     private final GestureDetector gestureDetector;
 
     OnSwipeTouchListener(Context ctx) {
-        gestureDetector = new GestureDetector(ctx, new GestureListener());
+        gestureDetector = new GestureDetector(ctx, new GestureListener(ctx));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -26,23 +24,44 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
     public void onSwipeLeft() {
     }
 
+    public void onSwipeTop() {
+    }
+
+    public void onSwipeBottom() {
+    }
+
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
-        private static final int SWIPE_THRESHOLD = 100;
-        private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+        private final Context ctx;
+
+        public GestureListener(Context ctx) {
+            this.ctx = ctx;
+        }
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             boolean result = false;
             try {
+                int height = getDisplayHeight();
+                int width = getDisplayWidth();
+
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
                 if (Math.abs(diffX) > Math.abs(diffY)) {
-                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (Math.abs(diffX) > width / 4 && Math.abs(velocityX) > height / 4) {
                         if (diffX > 0) {
                             onSwipeRight();
                         } else {
                             onSwipeLeft();
+                        }
+                        result = true;
+                    }
+                } else if (Math.abs(diffY) > Math.abs(diffX)) {
+                    if (Math.abs(diffY) > height / 4 && Math.abs(velocityY) > height / 4) {
+                        if (diffY > 0 && e1.getY() < height / 5) {
+                            onSwipeBottom();
+                        } else if (diffY <= 0 && e1.getY() > height - (height / 5)) {
+                            onSwipeTop();
                         }
                         result = true;
                     }
@@ -51,6 +70,24 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
                 exception.printStackTrace();
             }
             return result;
+        }
+
+        private int getDisplayHeight() {
+            WindowManager windowManager = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+            if (windowManager != null) {
+                Display display = windowManager.getDefaultDisplay();
+                return display.getHeight();
+            }
+            return 0;
+        }
+
+        private int getDisplayWidth() {
+            WindowManager windowManager = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+            if (windowManager != null) {
+                Display display = windowManager.getDefaultDisplay();
+                return display.getWidth();
+            }
+            return 0;
         }
     }
 }

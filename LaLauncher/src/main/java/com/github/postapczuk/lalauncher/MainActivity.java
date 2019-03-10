@@ -1,8 +1,8 @@
 package com.github.postapczuk.lalauncher;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
+import android.app.WallpaperManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,8 +13,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.transition.Slide;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -45,8 +43,9 @@ public class MainActivity extends AppsActivity {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-            this.getWindow().setEnterTransition(new Slide(Gravity.RIGHT));
-            this.getWindow().setExitTransition(new Slide(Gravity.LEFT));
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+            this.getWindow().setBackgroundDrawable(WallpaperManager.getInstance(getApplicationContext()).getDrawable());
         }
         packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(this, simple_list_item_1, new ArrayList<String>()) {
@@ -127,17 +126,10 @@ public class MainActivity extends AppsActivity {
     public void onSwipeHandler() {
         MainActivity mainActivity = this;
         listView.setOnTouchListener(new OnSwipeTouchListener(mainActivity) {
-            public void onSwipeLeft() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(
-                            new Intent(getBaseContext(), AllAppsActivity.class),
-                            ActivityOptions.makeSceneTransitionAnimation(mainActivity).toBundle()
-                    );
-                } else {
-                    startActivity(
-                            new Intent(getBaseContext(), AllAppsActivity.class)
-                    );
-                }
+            public void onSwipeTop() {
+                startActivity(
+                        new Intent(getBaseContext(), AllAppsActivity.class)
+                );
             }
         });
     }
@@ -204,6 +196,7 @@ public class MainActivity extends AppsActivity {
     private void loadListView() {
         loadFavouritesFromPreferences();
         createNewListView();
+        listView.setBackgroundColor(Color.argb(150, 0, 0, 0));
     }
 
     private String getApplicationLabel(ComponentName componentName) {
