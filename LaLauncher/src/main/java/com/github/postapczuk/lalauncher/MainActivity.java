@@ -126,8 +126,7 @@ public class MainActivity extends AppsActivity {
 
     @Override
     public void onSwipeHandler() {
-        MainActivity mainActivity = this;
-        listView.setOnTouchListener(new OnSwipeTouchListener(mainActivity) {
+        listView.setOnTouchListener(new OnSwipeTouchListenerMain(this) {
             public void onSwipeTop() {
                 startActivity(
                         new Intent(getBaseContext(), AllAppsActivity.class)

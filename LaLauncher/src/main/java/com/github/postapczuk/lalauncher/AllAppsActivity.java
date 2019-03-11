@@ -32,7 +32,7 @@ public class AllAppsActivity extends AppsActivity {
 
     @Override
     public void onSwipeHandler() {
-        listView.setOnTouchListener(new OnSwipeTouchListener(AllAppsActivity.this) {
+        listView.setOnTouchListener(new OnSwipeTouchListenerAllApps(this) {
             public void onSwipeBottom() {
                 listView.cancelLongPress();
                 onBackPressed();

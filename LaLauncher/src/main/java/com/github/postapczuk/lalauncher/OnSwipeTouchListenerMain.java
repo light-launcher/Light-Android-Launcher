@@ -6,11 +6,11 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class OnSwipeTouchListener implements View.OnTouchListener {
+public class OnSwipeTouchListenerMain implements View.OnTouchListener {
 
     private final GestureDetector gestureDetector;
 
-    OnSwipeTouchListener(Context ctx) {
+    OnSwipeTouchListenerMain(Context ctx) {
         gestureDetector = new GestureDetector(ctx, new GestureListener(ctx));
     }
 
@@ -27,9 +27,6 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
     }
 
     public void onSwipeTop() {
-    }
-
-    public void onSwipeBottom() {
     }
 
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -60,14 +57,9 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
                         }
                     }
                 } else if (Math.abs(diffY) > Math.abs(diffX)) {
-                    if (Math.abs(diffY) > width / 5 && Math.abs(velocityY) > width / 5) {
-                        if (diffY > 0 && e2.getY() < height / 2) {
-                            onSwipeBottom();
-                            result = true;
-                        } else if (diffY <= 0 && e1.getY() > height - (height / 5)) {
-                            onSwipeTop();
-                            result = true;
-                        }
+                    if (Math.abs(diffY) > width / 5 && Math.abs(velocityY) > width / 5 && diffY <= 0 && e1.getY() > height - (height / 5)) {
+                        onSwipeTop();
+                        result = true;
                     }
                 }
             } catch (Exception exception) {
