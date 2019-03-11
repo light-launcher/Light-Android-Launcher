@@ -22,7 +22,7 @@ No trackers, no ads, and no device permissions. Open Source Code, available on G
 Fork of https://github.com/Collinux/minimalist-launcher.
 
 ### Android version
-Works with each Android version from 1.6 (Donut).
+Works with each Android version from 2.0 (API 5).
    
 ### Contribution
 Project was done for my personal usage, but I am aware that some people prefer simplicity and some need the small battery drain or processor usage - thats why I decided to share the project. Feel free to contribute.
