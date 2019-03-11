@@ -60,12 +60,13 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
                     }
                 } else if (Math.abs(diffY) > Math.abs(diffX)) {
                     if (Math.abs(diffY) > width / 5 && Math.abs(velocityY) > width / 5) {
-                        if (diffY > 0 && e1.getX() > width - (width / 5)) {
+                        if (diffY > 0 && e2.getY() < height / 2) {
                             onSwipeBottom();
-                        } else if (diffY <= 0 && e1.getX() > width - (width / 5)) {
+                            result = true;
+                        } else if (diffY <= 0 && e1.getY() > height - (height / 5)) {
                             onSwipeTop();
+                            result = true;
                         }
-                        result = true;
                     }
                 }
             } catch (Exception exception) {

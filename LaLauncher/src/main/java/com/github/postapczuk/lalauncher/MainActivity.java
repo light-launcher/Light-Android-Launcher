@@ -14,7 +14,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -48,8 +47,6 @@ public class MainActivity extends AppsActivity {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
             Drawable mutatedDrawable = WallpaperManager.getInstance(getApplicationContext()).getDrawable().mutate();
-            Display display = ScreenUtils.getDisplay(getApplicationContext());
-            mutatedDrawable.setBounds(0, 0, display.getWidth(), display.getHeight());
             this.getWindow().setBackgroundDrawable(mutatedDrawable);
         }
         packageManager = getPackageManager();
