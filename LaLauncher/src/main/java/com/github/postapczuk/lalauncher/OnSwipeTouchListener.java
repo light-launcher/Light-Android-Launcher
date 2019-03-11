@@ -2,7 +2,9 @@ package com.github.postapczuk.lalauncher;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.*;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 
 public class OnSwipeTouchListener implements View.OnTouchListener {
 
@@ -42,8 +44,8 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             boolean result = false;
             try {
-                int height = getDisplayHeight();
-                int width = getDisplayWidth();
+                int height = ScreenUtils.getDisplay(ctx).getHeight();
+                int width = ScreenUtils.getDisplay(ctx).getWidth();
 
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
@@ -58,9 +60,9 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
                     }
                 } else if (Math.abs(diffY) > Math.abs(diffX)) {
                     if (Math.abs(diffY) > width / 5 && Math.abs(velocityY) > width / 5) {
-                        if (diffY > 0 && e1.getY() < height / 5) {
+                        if (diffY > 0 && e1.getX() > width - (width / 5)) {
                             onSwipeBottom();
-                        } else if (diffY <= 0 && e1.getY() > height - (height / 5)) {
+                        } else if (diffY <= 0 && e1.getX() > width - (width / 5)) {
                             onSwipeTop();
                         }
                         result = true;
@@ -70,24 +72,6 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
                 exception.printStackTrace();
             }
             return result;
-        }
-
-        private int getDisplayHeight() {
-            WindowManager windowManager = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
-            if (windowManager != null) {
-                Display display = windowManager.getDefaultDisplay();
-                return display.getHeight();
-            }
-            return 0;
-        }
-
-        private int getDisplayWidth() {
-            WindowManager windowManager = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
-            if (windowManager != null) {
-                Display display = windowManager.getDefaultDisplay();
-                return display.getWidth();
-            }
-            return 0;
         }
     }
 }

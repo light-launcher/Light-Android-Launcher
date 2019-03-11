@@ -10,9 +10,11 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -45,7 +47,10 @@ public class MainActivity extends AppsActivity {
             this.getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            this.getWindow().setBackgroundDrawable(WallpaperManager.getInstance(getApplicationContext()).getDrawable());
+            Drawable mutatedDrawable = WallpaperManager.getInstance(getApplicationContext()).getDrawable().mutate();
+            Display display = ScreenUtils.getDisplay(getApplicationContext());
+            mutatedDrawable.setBounds(0, 0, display.getWidth(), display.getHeight());
+            this.getWindow().setBackgroundDrawable(mutatedDrawable);
         }
         packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(this, simple_list_item_1, new ArrayList<String>()) {
