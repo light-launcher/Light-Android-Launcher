@@ -1,6 +1,7 @@
 package com.github.postapczuk.lalauncher;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
@@ -22,12 +23,14 @@ public class AllAppsActivity extends AppsActivity {
         packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(this, simple_list_item_1, new ArrayList<String>());
         createNewListView();
+        listView.setBackgroundColor(Color.BLACK);
         setTaskBarTransparent();
     }
 
     @Override
     public void onBackPressed() {
         finish();
+        overridePendingTransition(android.R.anim.fade_in, R.anim.slide_down);
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.github.postapczuk.lalauncher;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.WallpaperManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +9,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -44,10 +42,6 @@ public class MainActivity extends AppsActivity {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            Drawable mutatedDrawable = WallpaperManager.getInstance(getApplicationContext()).getDrawable().mutate();
-            this.getWindow().setBackgroundDrawable(mutatedDrawable);
         }
         packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(this, simple_list_item_1, new ArrayList<String>()) {
@@ -131,6 +125,7 @@ public class MainActivity extends AppsActivity {
                 startActivity(
                         new Intent(getBaseContext(), AllAppsActivity.class)
                 );
+                overridePendingTransition(R.anim.slide_up, android.R.anim.fade_out);
             }
         });
     }
