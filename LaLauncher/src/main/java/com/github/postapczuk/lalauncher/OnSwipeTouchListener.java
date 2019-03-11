@@ -53,10 +53,11 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
                     if (Math.abs(diffX) > width / 5 && Math.abs(velocityX) > height / 5) {
                         if (diffX > 0) {
                             onSwipeRight();
+                            result = true;
                         } else {
                             onSwipeLeft();
+                            result = true;
                         }
-                        result = true;
                     }
                 } else if (Math.abs(diffY) > Math.abs(diffX)) {
                     if (Math.abs(diffY) > width / 5 && Math.abs(velocityY) > width / 5) {
