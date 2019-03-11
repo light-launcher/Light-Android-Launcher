@@ -5,7 +5,7 @@
      height="80">](https://f-droid.org/packages/com.github.postapczuk.lalauncher/)
 
 <p align="center">
-  <img src="https://github.com/postapczuk/Light-Android-Launcher/raw/master/TRIM_20190209_165251.gif" style="max-height:600px"/>
+  <img src="https://github.com/postapczuk/Light-Android-Launcher/raw/master/SCR_20190311_165639.gif" style="max-height:600px"/>
 </p>
 
 ## Free yourself from huge streams of information
@@ -14,7 +14,7 @@
 
 ### How to use
 <p>Main screen allows you to add favourite apps.</p>
-<p>To go to the all-apps view, just swipe from right to left. Long press on that view allows you to read info about app.</p>
+<p>To go to the all-apps view, just swipe from bottom to top of screen. Long press on that view allows you to read info about app.</p>
 
 ### Free & Open Source
 No trackers, no ads, and no device permissions. Open Source Code, available on GPLv2 license.
