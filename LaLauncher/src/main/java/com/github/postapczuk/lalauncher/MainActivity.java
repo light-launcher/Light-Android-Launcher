@@ -30,10 +30,11 @@ import static android.R.layout.simple_list_item_1;
 
 public class MainActivity extends AppsActivity {
 
-    private static final String FAVS = "favourites";
+    private static final String FAVS = "favorites";
     private static final String UPDATE_ALERT_SHOWN = "updateAlertShownVersion";
     private static final String SEPARATOR = ",,,";
-    private static final String ADD_APPLICATION = "+ add favourite app";
+    private static final String ADD_APPLICATION = "+ Add favorite app";
+    private static final String ADD_APPLICATION_SHORT = "+";
 
     private static final int DIMMED_ADD_FAVS_COLOR = Color.argb(120, 255, 255, 255);
     private static final int BACKGROUND_DIM_COLOR = Color.argb(160, 0, 0, 0);
@@ -85,7 +86,13 @@ public class MainActivity extends AppsActivity {
             apps.add(getApplicationLabel(componentName));
         }
 
-        apps.add(ADD_APPLICATION);
+        // Show "+ Add favorite app" on initial run
+        // Shorten to "+" when any favorite is set
+        if(apps.size() > 0) {
+            apps.add(ADD_APPLICATION_SHORT);
+        } else {
+            apps.add(ADD_APPLICATION);
+        }
 
         packageNames = new ArrayList<>();
         for (ComponentName componentName : componentNames) {
@@ -150,7 +157,7 @@ public class MainActivity extends AppsActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
         }
-        builder.setTitle("Pick an app");
+        builder.setTitle("Add favorite app");
 
         List<String> smallAdapter = new ArrayList<>();
         List<String> smallPackageNames = new ArrayList<>();
