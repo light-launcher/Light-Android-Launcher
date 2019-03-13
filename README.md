@@ -14,7 +14,7 @@
 
 ### How to use
 <p>Main screen allows you to add favourite apps.</p>
-<p>To go to the all-apps view, just swipe top from bottom of screen. Long press on that view allows you to read info about app. To go back to favourites view press back button or swipe from top to maximum half of the screen height.</p>
+<p>To access all-apps view, just swipe vertically from bottom of your screen. Long press on that view allows you to read info about app. To go back to favourites view press back button or swipe vertically from top to maximum half of the screen height.</p>
 
 ### Free & Open Source
 No trackers, no ads, and no device permissions. Open Source Code, available on GPLv2 license.

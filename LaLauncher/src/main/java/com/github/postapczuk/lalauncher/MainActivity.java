@@ -30,6 +30,7 @@ import static android.R.layout.simple_list_item_1;
 public class MainActivity extends AppsActivity {
 
     private static final String FAVS = "favourites";
+    private static final String UPDATE_ALERT_SHOWN = "updateAlertShown";
     private static final String SEPARATOR = ",,,";
     private static final String ADD_APPLICATION = "+ add favourite app";
 
@@ -59,6 +60,7 @@ public class MainActivity extends AppsActivity {
             }
         };
         loadListView();
+        showUpdatesDialog();
     }
 
     @Override
@@ -201,6 +203,21 @@ public class MainActivity extends AppsActivity {
             return packageManager.getApplicationLabel(applicationInfo).toString();
         } catch (PackageManager.NameNotFoundException e) {
             return "Uninstalled app";
+        }
+    }
+
+    private void showUpdatesDialog() {
+        if (!preferences.getBoolean(UPDATE_ALERT_SHOWN, false)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Swiping direction changed!")
+                    .setMessage("Due to the latest update We've changed the swiping direction. " +
+                            "To access all-apps view, just swipe vertically from bottom of your screen. " +
+                            "To go back to favourites view press back button or swipe vertically from top " +
+                            "to maximum half of your screen.")
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+            preferences.edit().putBoolean(UPDATE_ALERT_SHOWN, true).commit();
         }
     }
 }
