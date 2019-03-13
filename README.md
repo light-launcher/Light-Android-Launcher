@@ -5,7 +5,7 @@
      height="80">](https://f-droid.org/packages/com.github.postapczuk.lalauncher/)
 
 <p align="center">
-  <img src="https://github.com/postapczuk/Light-Android-Launcher/raw/master/TRIM_20190209_165251.gif" style="max-height:600px"/>
+  <img src="https://github.com/postapczuk/Light-Android-Launcher/raw/master/SCR_20190311_165639.gif" style="max-height:600px"/>
 </p>
 
 ## Free yourself from huge streams of information
@@ -14,7 +14,7 @@
 
 ### How to use
 <p>Main screen allows you to add favourite apps.</p>
-<p>To go to the all-apps view, just swipe from right to left. Long press on that view allows you to read info about app.</p>
+<p>To access all-apps view, just swipe top vertically from bottom of your screen. Long press on that view allows you to read info about app. To go back to favourites view press back button or swipe bottom vertically.</p>
 
 ### Free & Open Source
 No trackers, no ads, and no device permissions. Open Source Code, available on GPLv2 license.
@@ -22,7 +22,7 @@ No trackers, no ads, and no device permissions. Open Source Code, available on G
 Fork of https://github.com/Collinux/minimalist-launcher.
 
 ### Android version
-Works with each Android version from 1.6 (Donut).
+Works with each Android version from 2.0 (API 5).
    
 ### Contribution
 Project was done for my personal usage, but I am aware that some people prefer simplicity and some need the small battery drain or processor usage - thats why I decided to share the project. Feel free to contribute.

@@ -1,10 +1,9 @@
 package com.github.postapczuk.lalauncher;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.transition.Slide;
-import android.view.Gravity;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 
@@ -20,27 +19,24 @@ public class AllAppsActivity extends AppsActivity {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-            this.getWindow().setEnterTransition(new Slide(Gravity.RIGHT));
-            this.getWindow().setExitTransition(new Slide(Gravity.LEFT));
         }
         packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(this, simple_list_item_1, new ArrayList<String>());
         createNewListView();
+        listView.setBackgroundColor(Color.BLACK);
         setTaskBarTransparent();
     }
 
     @Override
     public void onBackPressed() {
         finish();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-        }
+        overridePendingTransition(android.R.anim.fade_in, R.anim.slide_down);
     }
 
     @Override
     public void onSwipeHandler() {
-        listView.setOnTouchListener(new OnSwipeTouchListener(AllAppsActivity.this) {
-            public void onSwipeRight() {
+        listView.setOnTouchListener(new OnSwipeTouchListenerAllApps(this, listView) {
+            public void onSwipeBottom() {
                 listView.cancelLongPress();
                 onBackPressed();
             }

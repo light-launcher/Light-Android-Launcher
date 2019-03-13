@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 28
+    compileSdkVersion 26
     defaultConfig {
         applicationId 'com.github.postapczuk.lalauncher'
-        minSdkVersion 4
-        targetSdkVersion 28
-        versionCode 6
-        versionName '1.5'
+        minSdkVersion 5
+        targetSdkVersion 26
+        versionCode 7
+        versionName '1.6'
     }
     buildTypes {
         release {
