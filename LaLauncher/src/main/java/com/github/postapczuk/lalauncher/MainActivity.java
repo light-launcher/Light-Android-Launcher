@@ -30,7 +30,7 @@ import static android.R.layout.simple_list_item_1;
 
 public class MainActivity extends AppsActivity {
 
-    private static final String FAVS = "favorites";
+    private static final String FAVS = "favourites";
     private static final String UPDATE_ALERT_SHOWN = "updateAlertShownVersion";
     private static final String SEPARATOR = ",,,";
     private static final String ADD_APPLICATION = "+ Add favorite app";
