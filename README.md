@@ -5,7 +5,7 @@
      height="80">](https://f-droid.org/packages/com.github.postapczuk.lalauncher/)
 
 <p align="center">
-  <img src="https://github.com/postapczuk/Light-Android-Launcher/raw/master/SCR_20190311_165639.gif" style="max-height:600px"/>
+  <img src="https://github.com/light-launcher/Light-Android-Launcher/raw/master/SCR_20190311_165639.gif" style="max-height:600px"/>
 </p>
 
 ## Free yourself from huge streams of information
