@@ -27,7 +27,7 @@ public class OnSwipeTouchListenerAllApps implements View.OnTouchListener {
     }
 
     private boolean canScrollUp() {
-        return !(listView.getFirstVisiblePosition() > 0 || listView.getChildAt(0).getTop() < listView.getPaddingTop());
+        return !(listView.getFirstVisiblePosition() > 3 || listView.getChildAt(3).getTop() < listView.getPaddingTop());
     }
 
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -46,7 +46,7 @@ public class OnSwipeTouchListenerAllApps implements View.OnTouchListener {
                     int height = ScreenUtils.getDisplay(ctx).getHeight();
 
                     float diffY = e2.getY() - e1.getY();
-                    if (Math.abs(diffY) > height / 5) {
+                    if (Math.abs(diffY) > height / 5 && diffY > 0) {
                         onSwipeBottom();
                         result = true;
                     }
