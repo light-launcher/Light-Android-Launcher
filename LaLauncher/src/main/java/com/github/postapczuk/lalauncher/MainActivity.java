@@ -1,7 +1,6 @@
 package com.github.postapczuk.lalauncher;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -13,11 +12,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.transition.Slide;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,8 +31,13 @@ import static android.R.layout.simple_list_item_1;
 public class MainActivity extends AppsActivity {
 
     private static final String FAVS = "favourites";
+    private static final String UPDATE_ALERT_SHOWN = "updateAlertShownVersion";
     private static final String SEPARATOR = ",,,";
-    private static final String ADD_APPLICATION = "+ add favourite app";
+    private static final String ADD_APPLICATION = "+ Add favorite app";
+    private static final String ADD_APPLICATION_SHORT = "+";
+
+    private static final int DIMMED_ADD_FAVS_COLOR = Color.argb(120, 255, 255, 255);
+    private static final int BACKGROUND_DIM_COLOR = Color.argb(160, 0, 0, 0);
 
     private SharedPreferences preferences;
     private List<String> favourites = new ArrayList<String>();
@@ -45,9 +48,8 @@ public class MainActivity extends AppsActivity {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-            this.getWindow().setEnterTransition(new Slide(Gravity.RIGHT));
-            this.getWindow().setExitTransition(new Slide(Gravity.LEFT));
         }
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         packageManager = getPackageManager();
         adapter = new ArrayAdapter<String>(this, simple_list_item_1, new ArrayList<String>()) {
 
@@ -61,13 +63,15 @@ public class MainActivity extends AppsActivity {
                 text.setHighlightColor(getResources().getColor(R.color.colorPrimary));
 
                 if (position == getCount() - 1 && position != 0) {
-                    text.setTextColor(getResources().getColor(R.color.colorUnderstate));
+                    text.setTextColor(DIMMED_ADD_FAVS_COLOR);
                 }
 
                 return view;
             }
         };
         loadListView();
+        overridePendingTransition(R.anim.slide_up, android.R.anim.fade_out);
+        showUpdatesDialog();
     }
 
     @Override
@@ -86,7 +90,13 @@ public class MainActivity extends AppsActivity {
             apps.add(getApplicationLabel(componentName));
         }
 
-        apps.add(ADD_APPLICATION);
+        // Show "+ Add favorite app" on initial run
+        // Shorten to "+" when any favorite is set
+        if(apps.size() > 0) {
+            apps.add(ADD_APPLICATION_SHORT);
+        } else {
+            apps.add(ADD_APPLICATION);
+        }
 
         packageNames = new ArrayList<>();
         for (ComponentName componentName : componentNames) {
@@ -135,19 +145,10 @@ public class MainActivity extends AppsActivity {
 
     @Override
     public void onSwipeHandler() {
-        MainActivity mainActivity = this;
-        listView.setOnTouchListener(new OnSwipeTouchListener(mainActivity) {
-            public void onSwipeLeft() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(
-                            new Intent(getBaseContext(), AllAppsActivity.class),
-                            ActivityOptions.makeSceneTransitionAnimation(mainActivity).toBundle()
-                    );
-                } else {
-                    startActivity(
-                            new Intent(getBaseContext(), AllAppsActivity.class)
-                    );
-                }
+        listView.setOnTouchListener(new OnSwipeTouchListenerMain(this) {
+            public void onSwipeTop() {
+                startActivity(new Intent(getBaseContext(), AllAppsActivity.class));
+                overridePendingTransition(R.anim.slide_up, android.R.anim.fade_out);
             }
         });
     }
@@ -165,7 +166,7 @@ public class MainActivity extends AppsActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
         }
-        builder.setTitle("Pick an app");
+        builder.setTitle("Add favorite app");
 
         List<String> smallAdapter = new ArrayList<>();
         List<String> smallPackageNames = new ArrayList<>();
@@ -213,6 +214,7 @@ public class MainActivity extends AppsActivity {
     private void loadListView() {
         loadFavouritesFromPreferences();
         createNewListView();
+        listView.setBackgroundColor(BACKGROUND_DIM_COLOR);
     }
 
     private String getApplicationLabel(ComponentName componentName) {
@@ -221,6 +223,32 @@ public class MainActivity extends AppsActivity {
             return packageManager.getApplicationLabel(applicationInfo).toString();
         } catch (PackageManager.NameNotFoundException e) {
             return "Uninstalled app";
+        }
+    }
+
+    private void showUpdatesDialog() {
+        try {
+            int appVersion = this.getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            if (preferences.getInt(UPDATE_ALERT_SHOWN, 0) < appVersion) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
+                }
+                builder.setTitle("Swiping direction changed!")
+                        .setMessage("Due to the latest update We've changed the swiping direction.\n" +
+                                "To access all-apps view, just swipe vertically from bottom of your screen.\n" +
+                                "To go back to favourites view press back button or swipe vertically to bottom.")
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                preferences.edit().putInt(UPDATE_ALERT_SHOWN, appVersion).commit();
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Toast.makeText(
+                    this,
+                    "Error: Couldn't show version changes",
+                    Toast.LENGTH_LONG
+            ).show();
         }
     }
 }

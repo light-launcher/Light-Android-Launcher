@@ -3,7 +3,6 @@ package com.github.postapczuk.lalauncher;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -129,18 +128,14 @@ abstract class AppsActivity extends Activity implements Activities {
 
     private void applyPadding() {
         listView.setClipToPadding(false);
-        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        if (windowManager != null) {
-            Display display = windowManager.getDefaultDisplay();
-            final int displayHeight = display.getHeight();
-            int heightViewBasedTopPadding = displayHeight / 6;
-            if (getTotalHeightOfListView() < displayHeight - heightViewBasedTopPadding) {
-                heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView() / 2);
-            }
-            int widthViewBasedSidePadding = (display.getWidth() / 6);
-
-            listView.setPadding(widthViewBasedSidePadding, heightViewBasedTopPadding, widthViewBasedSidePadding, 0);
+        Display display = ScreenUtils.getDisplay(getApplicationContext());
+        final int displayHeight = display.getHeight();
+        int heightViewBasedTopPadding = displayHeight / 6;
+        if (getTotalHeightOfListView() < displayHeight - heightViewBasedTopPadding) {
+            heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView() / 2);
         }
+        int widthViewBasedLeftPadding = (display.getWidth() / 6);
+        listView.setPadding(widthViewBasedLeftPadding, heightViewBasedTopPadding, 0, 0);
     }
 
     void setTaskBarTransparent() {
