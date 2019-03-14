@@ -8,10 +8,11 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -36,9 +37,6 @@ public class MainActivity extends AppsActivity {
     private static final String ADD_APPLICATION = "+ Add favorite app";
     private static final String ADD_APPLICATION_SHORT = "+";
 
-    private static final int DIMMED_ADD_FAVS_COLOR = Color.argb(120, 255, 255, 255);
-    private static final int BACKGROUND_DIM_COLOR = Color.argb(160, 0, 0, 0);
-
     private SharedPreferences preferences;
     private List<String> favourites = new ArrayList<String>();
 
@@ -57,9 +55,14 @@ public class MainActivity extends AppsActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView text = view.findViewById(android.R.id.text1);
+                applyItemPadding(text);
+
+                // Prevents the color of the text changing on click
+                text.setTextColor(getResources().getColor(R.color.colorTextPrimary));
+                text.setHighlightColor(getResources().getColor(R.color.colorTextPrimary));
 
                 if (position == getCount() - 1 && position != 0) {
-                    text.setTextColor(DIMMED_ADD_FAVS_COLOR);
+                    text.setTextColor(getResources().getColor(R.color.colorTextDimmed));
                 }
 
                 return view;
@@ -108,6 +111,14 @@ public class MainActivity extends AppsActivity {
     @Override
     public void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
+            TextView selectedItem = view.findViewById(view.getId());
+            selectedItem.setBackgroundColor(getResources().getColor(R.color.colorBackgroundFavorite));
+
+            // Remove background from selected item after a delay
+            new Handler().postDelayed(() -> {
+                selectedItem.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+            }, 350);
+
             if (position == packageNames.size() || packageNames.get(position).equals("")) {
                 showFavouriteModal();
                 return;
@@ -205,7 +216,7 @@ public class MainActivity extends AppsActivity {
     private void loadListView() {
         loadFavouritesFromPreferences();
         createNewListView();
-        listView.setBackgroundColor(BACKGROUND_DIM_COLOR);
+        listView.setBackgroundColor(getResources().getColor(R.color.colorBackgroundDimmed));
     }
 
     private String getApplicationLabel(ComponentName componentName) {
@@ -241,5 +252,12 @@ public class MainActivity extends AppsActivity {
                     Toast.LENGTH_LONG
             ).show();
         }
+    }
+
+    // Set the left padding at the item level vs the listview level
+    private void applyItemPadding(TextView item){
+        Display display = ScreenUtils.getDisplay(getApplicationContext());
+        int widthViewBasedLeftPadding = (display.getWidth() / 6);
+        item.setPadding(widthViewBasedLeftPadding, 0, 0, 0);
     }
 }
