@@ -10,9 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -58,8 +56,7 @@ public class MainActivity extends AppsActivity {
                 applyItemPadding(text);
 
                 // Prevents the color of the text changing on click
-                text.setTextColor(getResources().getColor(R.color.colorTextPrimary));
-                text.setHighlightColor(getResources().getColor(R.color.colorTextPrimary));
+                setTextColoring(text);
 
                 if (position == getCount() - 1 && position != 0) {
                     text.setTextColor(getResources().getColor(R.color.colorTextDimmed));
@@ -111,13 +108,8 @@ public class MainActivity extends AppsActivity {
     @Override
     public void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            TextView selectedItem = view.findViewById(view.getId());
-            selectedItem.setBackgroundColor(getResources().getColor(R.color.colorBackgroundFavorite));
-
-            // Remove background from selected item after a delay
-            new Handler().postDelayed(() -> {
-                selectedItem.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
-            }, 350);
+            TextView selectedItem = getTextView(view);
+            toggleTextviewBackground(selectedItem);
 
             if (position == packageNames.size() || packageNames.get(position).equals("")) {
                 showFavouriteModal();
@@ -252,12 +244,5 @@ public class MainActivity extends AppsActivity {
                     Toast.LENGTH_LONG
             ).show();
         }
-    }
-
-    // Set the left padding at the item level vs the listview level
-    private void applyItemPadding(TextView item){
-        Display display = ScreenUtils.getDisplay(getApplicationContext());
-        int widthViewBasedLeftPadding = (display.getWidth() / 6);
-        item.setPadding(widthViewBasedLeftPadding, 0, 0, 0);
     }
 }

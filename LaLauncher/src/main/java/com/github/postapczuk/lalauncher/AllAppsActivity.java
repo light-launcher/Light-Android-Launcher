@@ -3,7 +3,6 @@ package com.github.postapczuk.lalauncher;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -33,8 +32,7 @@ public class AllAppsActivity extends AppsActivity {
                 applyItemPadding(text);
 
                 // Prevents the color of the text changing on click
-                text.setTextColor(getResources().getColor(R.color.colorTextPrimary));
-                text.setHighlightColor(getResources().getColor(R.color.colorTextPrimary));
+                setTextColoring(text);
 
                 return view;
             }
@@ -59,12 +57,5 @@ public class AllAppsActivity extends AppsActivity {
                 onBackPressed();
             }
         });
-    }
-
-    // Set the left padding at the item level vs the listview level
-    private void applyItemPadding(TextView item){
-        Display display = ScreenUtils.getDisplay(getApplicationContext());
-        int widthViewBasedLeftPadding = (display.getWidth() / 6);
-        item.setPadding(widthViewBasedLeftPadding, 0, 0, 0);
     }
 }

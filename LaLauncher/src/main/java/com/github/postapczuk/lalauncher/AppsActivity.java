@@ -77,13 +77,8 @@ abstract class AppsActivity extends Activity implements Activities {
 
     public void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            TextView selectedItem = view.findViewById(view.getId());
-            selectedItem.setBackgroundColor(getResources().getColor(R.color.colorBackgroundFavorite));
-
-            // Remove background from selected item after a delay
-            new Handler().postDelayed(() -> {
-                selectedItem.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
-            }, 350);
+            TextView selectedItem = getTextView(view);
+            toggleTextviewBackground(selectedItem);
 
             String packageName = packageNames.get(position);
             try {
@@ -101,13 +96,8 @@ abstract class AppsActivity extends Activity implements Activities {
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public void onLongPressHandler() {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
-            TextView selectedItem = view.findViewById(view.getId());
-            selectedItem.setBackgroundColor(getResources().getColor(R.color.colorBackgroundFavorite));
-
-            // Remove background from selected item after a delay
-            new Handler().postDelayed(() -> {
-                selectedItem.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
-            }, 350);
+            TextView selectedItem = getTextView(view);
+            toggleTextviewBackground(selectedItem);
 
             try {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -120,6 +110,23 @@ abstract class AppsActivity extends Activity implements Activities {
         });
     }
 
+    public void toggleTextviewBackground(TextView selectedItem) {
+        selectedItem.setBackgroundColor(getResources().getColor(R.color.colorBackgroundFavorite));
+
+        new Handler().postDelayed(() -> {
+            selectedItem.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+        }, 350);
+    }
+
+    public TextView getTextView(View view) {
+        return view.findViewById(view.getId());
+    }
+
+    public void setTextColoring(TextView text) {
+        text.setTextColor(getResources().getColor(R.color.colorTextPrimary));
+        text.setHighlightColor(getResources().getColor(R.color.colorTextPrimary));
+    }
+
     private void applyPadding() {
         listView.setClipToPadding(false);
         Display display = ScreenUtils.getDisplay(getApplicationContext());
@@ -130,6 +137,13 @@ abstract class AppsActivity extends Activity implements Activities {
         }
 
         listView.setPadding(0, heightViewBasedTopPadding, 0, 0);
+    }
+
+    // Set the left padding at the item level vs the listview level
+    void applyItemPadding(TextView item){
+        Display display = ScreenUtils.getDisplay(getApplicationContext());
+        int widthViewBasedLeftPadding = (display.getWidth() / 6);
+        item.setPadding(widthViewBasedLeftPadding, 0, 0, 0);
     }
 
     void setTaskBarTransparent() {
