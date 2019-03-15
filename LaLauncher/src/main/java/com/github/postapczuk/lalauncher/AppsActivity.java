@@ -8,12 +8,14 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ abstract class AppsActivity extends Activity implements Activities {
         listView.setId(android.R.id.list);
         listView.setVerticalScrollBarEnabled(false);
         listView.setDivider(null);
+        listView.setSelector(android.R.color.transparent);
         setActions();
         applyPadding();
         setContentView(listView);
@@ -74,6 +77,9 @@ abstract class AppsActivity extends Activity implements Activities {
 
     public void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
+            TextView selectedItem = getTextView(view);
+            toggleTextviewBackground(selectedItem);
+
             String packageName = packageNames.get(position);
             try {
                 startActivity(packageManager.getLaunchIntentForPackage(packageName));
@@ -90,6 +96,9 @@ abstract class AppsActivity extends Activity implements Activities {
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public void onLongPressHandler() {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            TextView selectedItem = getTextView(view);
+            toggleTextviewBackground(selectedItem);
+
             try {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 intent.setData(Uri.parse("package:" + packageNames.get(position)));
@@ -101,6 +110,23 @@ abstract class AppsActivity extends Activity implements Activities {
         });
     }
 
+    public void toggleTextviewBackground(TextView selectedItem) {
+        selectedItem.setBackgroundColor(getResources().getColor(R.color.colorBackgroundFavorite));
+
+        new Handler().postDelayed(() -> {
+            selectedItem.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+        }, 350);
+    }
+
+    public TextView getTextView(View view) {
+        return view.findViewById(view.getId());
+    }
+
+    public void setTextColoring(TextView text) {
+        text.setTextColor(getResources().getColor(R.color.colorTextPrimary));
+        text.setHighlightColor(getResources().getColor(R.color.colorTextPrimary));
+    }
+
     private void applyPadding() {
         listView.setClipToPadding(false);
         Display display = ScreenUtils.getDisplay(getApplicationContext());
@@ -109,8 +135,15 @@ abstract class AppsActivity extends Activity implements Activities {
         if (getTotalHeightOfListView() < displayHeight - heightViewBasedTopPadding) {
             heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView() / 2);
         }
+
+        listView.setPadding(0, heightViewBasedTopPadding, 0, 0);
+    }
+
+    // Set the left padding at the item level vs the listview level
+    void applyItemPadding(TextView item){
+        Display display = ScreenUtils.getDisplay(getApplicationContext());
         int widthViewBasedLeftPadding = (display.getWidth() / 6);
-        listView.setPadding(widthViewBasedLeftPadding, heightViewBasedTopPadding, 0, 0);
+        item.setPadding(widthViewBasedLeftPadding, 0, 0, 0);
     }
 
     void setTaskBarTransparent() {

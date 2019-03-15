@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -36,9 +35,6 @@ public class MainActivity extends AppsActivity {
     private static final String ADD_APPLICATION = "+ Add favorite app";
     private static final String ADD_APPLICATION_SHORT = "+";
 
-    private static final int DIMMED_ADD_FAVS_COLOR = Color.argb(120, 255, 255, 255);
-    private static final int BACKGROUND_DIM_COLOR = Color.argb(160, 0, 0, 0);
-
     private SharedPreferences preferences;
     private List<String> favourites = new ArrayList<String>();
 
@@ -57,9 +53,13 @@ public class MainActivity extends AppsActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView text = view.findViewById(android.R.id.text1);
+                applyItemPadding(text);
+
+                // Prevents the color of the text changing on click
+                setTextColoring(text);
 
                 if (position == getCount() - 1 && position != 0) {
-                    text.setTextColor(DIMMED_ADD_FAVS_COLOR);
+                    text.setTextColor(getResources().getColor(R.color.colorTextDimmed));
                 }
 
                 return view;
@@ -108,6 +108,9 @@ public class MainActivity extends AppsActivity {
     @Override
     public void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
+            TextView selectedItem = getTextView(view);
+            toggleTextviewBackground(selectedItem);
+
             if (position == packageNames.size() || packageNames.get(position).equals("")) {
                 showFavouriteModal();
                 return;
@@ -205,7 +208,7 @@ public class MainActivity extends AppsActivity {
     private void loadListView() {
         loadFavouritesFromPreferences();
         createNewListView();
-        listView.setBackgroundColor(BACKGROUND_DIM_COLOR);
+        listView.setBackgroundColor(getResources().getColor(R.color.colorBackgroundDimmed));
     }
 
     private String getApplicationLabel(ComponentName componentName) {
