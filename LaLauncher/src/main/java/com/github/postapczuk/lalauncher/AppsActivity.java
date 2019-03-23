@@ -77,8 +77,7 @@ abstract class AppsActivity extends Activity implements Activities {
 
     public void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            TextView selectedItem = getTextView(view);
-            toggleTextviewBackground(selectedItem);
+            toggleTextviewBackground(view, 100L);
 
             String packageName = packageNames.get(position);
             try {
@@ -96,8 +95,7 @@ abstract class AppsActivity extends Activity implements Activities {
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public void onLongPressHandler() {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
-            TextView selectedItem = getTextView(view);
-            toggleTextviewBackground(selectedItem);
+            toggleTextviewBackground(view, 350L);
 
             try {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -110,19 +108,14 @@ abstract class AppsActivity extends Activity implements Activities {
         });
     }
 
-    public void toggleTextviewBackground(TextView selectedItem) {
+    void toggleTextviewBackground(View selectedItem, Long millis) {
         selectedItem.setBackgroundColor(getResources().getColor(R.color.colorBackgroundFavorite));
-
-        new Handler().postDelayed(() -> {
-            selectedItem.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
-        }, 350);
+        new Handler().postDelayed(() ->
+                selectedItem.setBackgroundColor(getResources().getColor(R.color.colorTransparent)),
+                millis);
     }
 
-    public TextView getTextView(View view) {
-        return view.findViewById(view.getId());
-    }
-
-    public void setTextColoring(TextView text) {
+    void setTextColoring(TextView text) {
         text.setTextColor(getResources().getColor(R.color.colorTextPrimary));
         text.setHighlightColor(getResources().getColor(R.color.colorTextPrimary));
     }

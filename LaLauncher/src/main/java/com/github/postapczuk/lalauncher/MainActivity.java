@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,8 +109,7 @@ public class MainActivity extends AppsActivity {
     @Override
     public void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            TextView selectedItem = getTextView(view);
-            toggleTextviewBackground(selectedItem);
+            toggleTextviewBackground(view, 100L);
 
             if (position == packageNames.size() || packageNames.get(position).equals("")) {
                 showFavouriteModal();
@@ -131,7 +131,9 @@ public class MainActivity extends AppsActivity {
     @Override
     public void onLongPressHandler() {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
-            this.removeFavourite(position);
+            toggleTextviewBackground(view, 350L);
+
+            runOnUiThread(() -> new Handler().postDelayed(() -> this.removeFavourite(position), 350L));
             return true;
         });
     }
