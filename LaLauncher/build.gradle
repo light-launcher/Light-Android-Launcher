@@ -6,7 +6,7 @@ android {
         minSdkVersion 5
         targetSdkVersion 26
         versionCode 9
-        versionName '1.6.2'
+        versionName '1.6.2-eink'
     }
     buildTypes {
         release {

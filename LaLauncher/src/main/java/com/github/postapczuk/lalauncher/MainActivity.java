@@ -67,7 +67,6 @@ public class MainActivity extends AppsActivity {
             }
         };
         loadListView();
-        overridePendingTransition(R.anim.slide_up, android.R.anim.fade_out);
         showUpdatesDialog();
     }
 
@@ -143,7 +142,6 @@ public class MainActivity extends AppsActivity {
         listView.setOnTouchListener(new OnSwipeTouchListenerMain(this) {
             public void onSwipeTop() {
                 startActivity(new Intent(getBaseContext(), AllAppsActivity.class));
-                overridePendingTransition(R.anim.slide_up, android.R.anim.fade_out);
             }
         });
     }
