@@ -11,10 +11,10 @@
 # Configurable, minimalistic, super lightweight app launcher with a low memory usage and small install size.</b>
 
 ## Functionalities
-<p>Main screen allows you to add favourite apps.</p>
-<p>To access all-apps view, just swipe top vertically from bottom of your screen.</p>
-<p>Long press on all-apps view allows you to read info about app (API >= 9).</p>
-<p>To go back to favourites view press back button or swipe bottom vertically.</p>
+1. Main screen allows you to add favourite apps.
+1. To access all-apps view, just swipe top vertically from bottom of your screen.
+1. Long press on all-apps view allows you to read info about app (API >= 9).
+1. To go back to favourites view press back button or swipe bottom vertically.
 
 # Android version
 Works with each Android version from 2.0 (API 5).
