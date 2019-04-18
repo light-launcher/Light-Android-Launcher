@@ -5,7 +5,7 @@
 
     <color name="colorBackgroundPrimary">#FFFFFF</color>
     <color name="colorBackgroundDimmed">#FFFFFF</color>
-    <color name="colorBackgroundFavorite">#FFFFFF</color>
+    <color name="colorBackgroundFavorite">#40000000</color>
 
     <color name="colorTransparent">#00FFFFFF</color>
 </resources>
