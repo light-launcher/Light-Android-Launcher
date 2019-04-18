@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorTextPrimary">#FFFFFF</color>
-    <color name="colorTextDimmed">#80FFFFFF</color>
+    <color name="colorTextPrimary">#000000</color>
+    <color name="colorTextDimmed">#80000000</color>
 
-    <color name="colorBackgroundPrimary">#000000</color>
-    <color name="colorBackgroundDimmed">#000000</color>
-    <color name="colorBackgroundFavorite">#66FFFFFF</color>
+    <color name="colorBackgroundPrimary">#FFFFFF</color>
+    <color name="colorBackgroundDimmed">#FFFFFF</color>
+    <color name="colorBackgroundFavorite">#FFFFFF</color>
 
-    <color name="colorTransparent">#00000000</color>
+    <color name="colorTransparent">#00FFFFFF</color>
 </resources>

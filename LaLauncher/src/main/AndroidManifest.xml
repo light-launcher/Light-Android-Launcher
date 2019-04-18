@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools" package="com.github.postapczuk.lalauncher">
     <application
             android:icon="@mipmap/ic_launcher"
-            android:label="Light Android Launcher"
+            android:label="Light Android Launcher (e-paper)"
             android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"
             android:immersive="true"
