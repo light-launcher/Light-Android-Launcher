@@ -230,10 +230,9 @@ public class MainActivity extends AppsActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                     builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
                 }
-                builder.setTitle("Swiping direction changed!")
-                        .setMessage("Due to the latest update We've changed the swiping direction.\n" +
-                                "To access all-apps view, just swipe vertically from bottom of your screen.\n" +
-                                "To go back to favourites view press back button or swipe vertically to bottom.")
+                builder.setTitle("Changelog")
+                        .setMessage("Due to the latest update:\n" +
+                                "- all apps view launches faster.")
                         .setPositiveButton(android.R.string.ok, null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();

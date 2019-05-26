@@ -36,13 +36,13 @@ abstract class AppsActivity extends Activity implements Activities {
 
     void createNewListView() {
         listView = new ListView(this);
+        setContentView(listView);
         listView.setId(android.R.id.list);
         listView.setVerticalScrollBarEnabled(false);
         listView.setDivider(null);
         listView.setSelector(android.R.color.transparent);
         setActions();
         applyPadding();
-        setContentView(listView);
     }
 
     List<ResolveInfo> getActivities(PackageManager packageManager) {
