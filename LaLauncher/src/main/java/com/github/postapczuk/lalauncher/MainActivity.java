@@ -232,7 +232,7 @@ public class MainActivity extends AppsActivity {
                 }
                 builder.setTitle("Changelog")
                         .setMessage("Due to the latest update:\n" +
-                                "- all apps view launches faster.")
+                                "- all apps view speed up (it loads slowly only for first time).")
                         .setPositiveButton(android.R.string.ok, null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();

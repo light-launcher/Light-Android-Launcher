@@ -45,7 +45,7 @@ public class AllAppsActivity extends AppsActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
+        super.onBackPressed();
         overridePendingTransition(android.R.anim.fade_in, R.anim.slide_down);
     }
 

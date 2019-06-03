@@ -31,6 +31,7 @@ abstract class AppsActivity extends Activity implements Activities {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         fetchAppList();
     }
 
@@ -41,6 +42,7 @@ abstract class AppsActivity extends Activity implements Activities {
         listView.setVerticalScrollBarEnabled(false);
         listView.setDivider(null);
         listView.setSelector(android.R.color.transparent);
+        fetchAppList();
         setActions();
         applyPadding();
     }
@@ -54,7 +56,6 @@ abstract class AppsActivity extends Activity implements Activities {
     }
 
     private void setActions() {
-        fetchAppList();
         onClickHandler();
         onLongPressHandler();
         onSwipeHandler();
