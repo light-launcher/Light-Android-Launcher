@@ -22,7 +22,7 @@ import java.util.List;
 
 public class InstalledAppsActivity extends Activity {
 
-    List<String> packageNames = new ArrayList<>();
+    private List<String> packageNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class InstalledAppsActivity extends Activity {
         return listView;
     }
 
-    List<ResolveInfo> getActivities(PackageManager packageManager) {
+    private List<ResolveInfo> getActivities(PackageManager packageManager) {
         Intent intent = new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER);
         List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
         Collections.sort(activities, new ResolveInfo.DisplayNameComparator(packageManager));
@@ -97,7 +97,7 @@ public class InstalledAppsActivity extends Activity {
         return totalHeight + (listView.getDividerHeight() * (adapter.getCount()));
     }
 
-    void setTextColoring(TextView text) {
+    private void setTextColoring(TextView text) {
         text.setTextColor(getResources().getColor(R.color.colorTextPrimary));
         text.setHighlightColor(getResources().getColor(R.color.colorTextPrimary));
     }
@@ -140,7 +140,7 @@ public class InstalledAppsActivity extends Activity {
         });
     }
 
-    void toggleTextviewBackground(View selectedItem, Long millis) {
+    private void toggleTextviewBackground(View selectedItem, Long millis) {
         selectedItem.setBackgroundColor(getResources().getColor(R.color.colorBackgroundFavorite));
         new Handler().postDelayed(() -> selectedItem.setBackgroundColor(getResources().getColor(R.color.colorTransparent)), millis);
     }
