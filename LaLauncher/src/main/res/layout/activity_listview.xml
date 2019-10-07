@@ -4,8 +4,11 @@
           android:id="@+id/label"
           android:layout_width="fill_parent"
           android:layout_height="fill_parent"
-          android:paddingVertical="20dip"
+          android:paddingTop="20dip"
+          android:paddingBottom="20dip"
           android:paddingLeft="60dip"
           android:paddingRight="21dip"
+          android:paddingStart="60dip"
+          android:paddingEnd="21dip"
           android:textSize="21sp">
 </TextView>

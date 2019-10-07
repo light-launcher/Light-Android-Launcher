@@ -23,12 +23,11 @@ Get it on:
 
 Android version
 ===============
-Works with each Android version from 5.1 (API 22)
-Separate "epaper-ready" branch will handle versions from 2.1 (API 5)
+Works with each Android version from 2.0 (API 5)
 
 ### E-paper version
 One of the goals of the app is to provide smooth experience for older e-paper devices like Nook Simple Touch (NST).
-There is a separate development branch for this kind of devices. 
+There is a separate development branch "epaper-ready" for this kind of devices. 
 The latest apk will always be under [this](https://www.dropbox.com/s/ci677hmb2s1la5w/LaLauncher-e-paper-unsigned.apk?dl=1) url.
 
 Free & Open Source

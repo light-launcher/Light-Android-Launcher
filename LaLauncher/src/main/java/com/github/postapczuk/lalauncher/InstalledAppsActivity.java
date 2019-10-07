@@ -1,12 +1,14 @@
 package com.github.postapczuk.lalauncher;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -30,8 +32,10 @@ public class InstalledAppsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        this.getWindow().requestFeature(
-                FEATURE_ACTIVITY_TRANSITIONS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.getWindow().requestFeature(
+                    FEATURE_ACTIVITY_TRANSITIONS);
+        }
         this.getWindow().setFlags(
                 FLAG_LAYOUT_NO_LIMITS,
                 FLAG_LAYOUT_NO_LIMITS);
@@ -107,6 +111,7 @@ public class InstalledAppsActivity extends Activity {
         });
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private void onLongPressHandler(ListView listView) {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             toggleTextviewBackground(view, 350L);

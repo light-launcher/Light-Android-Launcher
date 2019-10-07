@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -50,8 +51,10 @@ public class FavouriteAppsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setSystemUiVisibility(
-                SYSTEM_UI_FLAG_LOW_PROFILE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    SYSTEM_UI_FLAG_LOW_PROFILE);
+        }
         getWindow().setFlags(
                 FLAG_LAYOUT_NO_LIMITS,
                 FLAG_LAYOUT_NO_LIMITS);
@@ -200,7 +203,10 @@ public class FavouriteAppsActivity extends Activity {
     }
 
     private void showFavouriteModal(ListView listView) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
+        }
         builder.setTitle("Add favorite app");
 
         List<String> smallAdapter = new ArrayList<>();
@@ -247,9 +253,9 @@ public class FavouriteAppsActivity extends Activity {
 
     private void updateFavouritesInPreferences() {
         if (packageNames.isEmpty()) {
-            preferences.edit().putString(FAVS, "").apply();
+            preferences.edit().putString(FAVS, "").commit();
         } else {
-            preferences.edit().putString(FAVS, TextUtils.join(SEPARATOR, packageNames)).apply();
+            preferences.edit().putString(FAVS, TextUtils.join(SEPARATOR, packageNames)).commit();
         }
     }
 
