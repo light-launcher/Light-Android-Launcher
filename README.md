@@ -10,7 +10,7 @@ Configurable, minimalistic, super lightweight app launcher with a low memory usa
 
 Functionalities
 ===============
-1. Main screen allows you to add favourite apps.
+1. Main screen allows you to add/remove favourite apps.
 1. To access all-apps view, just swipe top vertically from bottom of your screen.
 1. Long press on all-apps view allows you to read info about app (API >= 9).
 1. To go back to favourites view press back button or swipe bottom vertically.
@@ -23,7 +23,8 @@ Get it on:
 
 Android version
 ===============
-Works with each Android version from 2.0 (API 5).
+Works with each Android version from 5.1 (API 22)
+Separate "epaper-ready" branch will handle versions from 2.1 (API 5)
 
 ### E-paper version
 One of the goals of the app is to provide smooth experience for older e-paper devices like Nook Simple Touch (NST).
