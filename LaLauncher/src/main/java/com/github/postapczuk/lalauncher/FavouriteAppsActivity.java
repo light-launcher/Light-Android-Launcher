@@ -203,7 +203,6 @@ public class FavouriteAppsActivity extends Activity {
     @Override
     public void onBackPressed() {
         startActivityIfNeeded(new Intent(getBaseContext(), InstalledAppsActivity.class), 0);
-        overridePendingTransition(R.anim.slide_up, android.R.anim.fade_out);
     }
 
     private void showFavouriteModal(ListView listView) {
