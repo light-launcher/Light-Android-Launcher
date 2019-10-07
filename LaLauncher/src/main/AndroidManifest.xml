@@ -9,8 +9,8 @@
             android:immersive="true"
             android:stateNotNeeded="true"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
-            tools:ignore="UnusedAttribute">
-        <activity android:name=".MainActivity"
+            tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
+        <activity android:name=".FavouriteAppsActivity"
                   android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,8 +19,8 @@
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </activity>
-        <activity android:name=".AllAppsActivity"
-                  android:parentActivityName=".MainActivity"
-                  tools:ignore="UnusedAttribute"/>
+        <activity android:name=".InstalledAppsActivity"
+                  android:launchMode="singleTask">
+        </activity>
     </application>
 </manifest>
