@@ -10,7 +10,7 @@
             android:stateNotNeeded="true"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
             tools:ignore="UnusedAttribute">
-        <activity android:name=".InstalledAppsActivity"
+        <activity android:name=".FavouriteAppsActivity"
                   android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

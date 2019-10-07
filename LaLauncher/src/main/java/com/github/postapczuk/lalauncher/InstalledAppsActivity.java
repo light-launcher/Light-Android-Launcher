@@ -1,24 +1,28 @@
 package com.github.postapczuk.lalauncher;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static android.view.Window.FEATURE_ACTIVITY_TRANSITIONS;
+import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 
 public class InstalledAppsActivity extends Activity {
 
@@ -26,11 +30,14 @@ public class InstalledAppsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.getWindow().requestFeature(
+                FEATURE_ACTIVITY_TRANSITIONS);
+        this.getWindow().setFlags(
+                FLAG_LAYOUT_NO_LIMITS,
+                FLAG_LAYOUT_NO_LIMITS);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        applyPadding(fetchAppList(createNewAdapter()));
-
+        setContentView(R.layout.activity_installed);
+        AttitudeHelper.applyPadding(fetchAppList(createNewAdapter()), ScreenUtils.getDisplay(getApplicationContext()));
     }
 
     private ArrayAdapter<String> createNewAdapter() {
@@ -60,8 +67,8 @@ public class InstalledAppsActivity extends Activity {
             packageNames.add(resolver.activityInfo.packageName);
         }
         listView.setAdapter(adapter);
-        setActions(listView);
-        return listView;
+        listView.setBackgroundColor(getResources().getColor(R.color.colorBackgroundDimmed));
+        return setActions(listView);
     }
 
     private List<ResolveInfo> getActivities(PackageManager packageManager) {
@@ -71,40 +78,16 @@ public class InstalledAppsActivity extends Activity {
         return activities;
     }
 
-    private void applyPadding(ListView listView) {
-        listView.setClipToPadding(false);
-        Display display = ScreenUtils.getDisplay(getApplicationContext());
-        final int displayHeight = display.getHeight();
-        int heightViewBasedTopPadding = displayHeight / 6;
-        if (getTotalHeightOfListView(listView) < displayHeight - heightViewBasedTopPadding) {
-            heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView(listView) / 2);
-        }
-
-        listView.setPadding(0, heightViewBasedTopPadding, 0, 0);
-    }
-
-    private int getTotalHeightOfListView(ListView listView) {
-        int totalHeight = 0;
-        ListAdapter adapter = listView.getAdapter();
-        for (int i = 0; i < adapter.getCount() - 1; i++) {
-            View view = adapter.getView(i, null, listView);
-            view.measure(
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-            );
-            totalHeight += view.getMeasuredHeight();
-        }
-        return totalHeight + (listView.getDividerHeight() * (adapter.getCount()));
-    }
-
     private void setTextColoring(TextView text) {
         text.setTextColor(getResources().getColor(R.color.colorTextPrimary));
         text.setHighlightColor(getResources().getColor(R.color.colorTextPrimary));
     }
 
-    private void setActions(ListView listView) {
+    private ListView setActions(ListView listView) {
         onClickHandler(listView);
         onLongPressHandler(listView);
+        onSwipeHandler(listView);
+        return listView;
     }
 
     private void onClickHandler(ListView listView) {
@@ -124,7 +107,6 @@ public class InstalledAppsActivity extends Activity {
         });
     }
 
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private void onLongPressHandler(ListView listView) {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             toggleTextviewBackground(view, 350L);
@@ -137,6 +119,16 @@ public class InstalledAppsActivity extends Activity {
                 fetchAppList((ArrayAdapter) listView.getAdapter());
             }
             return true;
+        });
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void onSwipeHandler(ListView listView) {
+        listView.setOnTouchListener(new OnSwipeTouchListenerAllApps(this, listView) {
+            public void onSwipeTop() {
+                startActivity(new Intent(getBaseContext(), FavouriteAppsActivity.class));
+                overridePendingTransition(R.anim.slide_up, android.R.anim.fade_out);
+            }
         });
     }
 

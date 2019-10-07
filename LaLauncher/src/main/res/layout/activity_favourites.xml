@@ -4,7 +4,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context=".InstalledAppsActivity">
+              android:background="@color/colorBackgroundDimmed"
+              tools:context=".FavouriteAppsActivity">
     <ListView
             android:id="@+id/mobile_list"
             android:layout_width="match_parent"
@@ -12,5 +13,6 @@
             android:scrollbars="none"
             android:divider="@null"
             android:dividerHeight="0dp"
+            android:listSelector="@color/colorTransparent"
     />
 </LinearLayout>
