@@ -67,7 +67,7 @@ public class InstalledAppsActivity extends Activity {
             packageNames.add(resolver.activityInfo.packageName);
         }
         listView.setAdapter(adapter);
-        listView.setBackgroundColor(getResources().getColor(R.color.colorBackgroundDimmed));
+        listView.setBackgroundColor(getResources().getColor(R.color.colorBackgroundPrimary));
         return setActions(listView);
     }
 
@@ -125,11 +125,17 @@ public class InstalledAppsActivity extends Activity {
     @SuppressLint("ClickableViewAccessibility")
     private void onSwipeHandler(ListView listView) {
         listView.setOnTouchListener(new OnSwipeTouchListenerAllApps(this, listView) {
-            public void onSwipeTop() {
-                startActivity(new Intent(getBaseContext(), FavouriteAppsActivity.class));
-                overridePendingTransition(R.anim.slide_up, android.R.anim.fade_out);
+            public void onSwipeBottom() {
+                onBackPressed();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, R.anim.slide_down);
+        this.finish();
     }
 
     private void toggleTextviewBackground(View selectedItem, Long millis) {

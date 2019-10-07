@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -38,6 +39,14 @@ public class FavouriteAppsActivity extends Activity {
     private SharedPreferences preferences;
     private List<String> favourites = new ArrayList<String>();
 
+    private Intent installedAppsIntent;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        installedAppsIntent = new Intent(getBaseContext(), InstalledAppsActivity.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +59,7 @@ public class FavouriteAppsActivity extends Activity {
         loadFavouritesFromPreferences();
 
         AttitudeHelper.applyPadding(fetchAppList(createNewAdapter()), ScreenUtils.getDisplay(getApplicationContext()));
+        installedAppsIntent = new Intent(getBaseContext(), InstalledAppsActivity.class);
     }
 
     private void loadFavouritesFromPreferences() {
@@ -131,7 +141,7 @@ public class FavouriteAppsActivity extends Activity {
 
     private void onClickHandler(ListView listView) {
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            toggleTextviewBackground(view, 100L);
+            toggleTextViewBackground(view, 100L);
 
             if (position == packageNames.size() || packageNames.get(position).equals("")) {
                 showFavouriteModal(listView);
@@ -152,9 +162,24 @@ public class FavouriteAppsActivity extends Activity {
 
     private void onLongPressHandler(ListView listView) {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
-            toggleTextviewBackground(view, 350L);
+            toggleTextViewBackground(view, 350L);
+            FavouriteAppsActivity favouriteAppsActivity = this;
 
-            runOnUiThread(() -> new Handler().postDelayed(() -> this.removeFavourite(position, listView), 350L));
+            runOnUiThread(() -> new Handler().postDelayed(() -> {
+                        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                        alertDialog.setTitle("Favourite app removal");
+                        alertDialog.setMessage("Do you want to remove this application from your favourites?");
+                        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                favouriteAppsActivity.removeFavourite(position, listView);
+                                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        alertDialog.show();
+
+
+                    }
+                    , 350L));
             return true;
         });
     }
@@ -163,10 +188,15 @@ public class FavouriteAppsActivity extends Activity {
     private void onSwipeHandler(ListView listView) {
         listView.setOnTouchListener(new OnSwipeTouchListenerMain(this) {
             public void onSwipeTop() {
-                startActivity(new Intent(getBaseContext(), InstalledAppsActivity.class));
-                overridePendingTransition(R.anim.slide_up, android.R.anim.fade_out);
+                onBackPressed();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(installedAppsIntent);
+        overridePendingTransition(R.anim.slide_up, android.R.anim.fade_out);
     }
 
     private void showFavouriteModal(ListView listView) {
@@ -179,9 +209,10 @@ public class FavouriteAppsActivity extends Activity {
         List<ResolveInfo> activities = getActivities();
         Collections.sort(activities, Comparators.comparing(pm -> pm.loadLabel(getPackageManager()).toString().toLowerCase()));
 
+
         for (ResolveInfo resolver : activities) {
             String appName = (String) resolver.loadLabel(getPackageManager());
-            if (appName.equals("Light Android Launcher"))
+            if (appName.equals("Light Android Launcher") || favourites.contains(resolver.activityInfo.packageName))
                 continue;
             smallAdapter.add(appName);
             smallPackageNames.add(resolver.activityInfo.packageName);
@@ -230,7 +261,7 @@ public class FavouriteAppsActivity extends Activity {
         }
     }
 
-    private void toggleTextviewBackground(View selectedItem, Long millis) {
+    private void toggleTextViewBackground(View selectedItem, Long millis) {
         selectedItem.setBackgroundColor(getResources().getColor(R.color.colorBackgroundFavorite));
         new Handler().postDelayed(() -> selectedItem.setBackgroundColor(getResources().getColor(R.color.colorTransparent)), millis);
     }

@@ -3,10 +3,10 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId 'com.github.postapczuk.lalauncher'
-        minSdkVersion 26
+        minSdkVersion 22
         targetSdkVersion 26
         versionCode 12
-        versionName '2.0.0'
+        versionName '1.7.0'
     }
     buildTypes {
         release {

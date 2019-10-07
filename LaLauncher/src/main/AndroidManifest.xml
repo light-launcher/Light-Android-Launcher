@@ -9,7 +9,7 @@
             android:immersive="true"
             android:stateNotNeeded="true"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
-            tools:ignore="UnusedAttribute">
+            tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
         <activity android:name=".FavouriteAppsActivity"
                   android:launchMode="singleTask">
             <intent-filter>
@@ -18,6 +18,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
+        </activity>
+        <activity android:name=".InstalledAppsActivity"
+                  android:launchMode="singleTask">
         </activity>
     </application>
 </manifest>
