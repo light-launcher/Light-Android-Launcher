@@ -36,17 +36,11 @@ public class FavouriteAppsActivity extends Activity {
     private static final String SEPARATOR = ",,,";
 
     private List<String> packageNames = new ArrayList<>();
+    private ArrayAdapter<String> adapter;
+    private ListView listView;
 
     private SharedPreferences preferences;
     private List<String> favourites = new ArrayList<String>();
-
-    private Intent installedAppsIntent;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        installedAppsIntent = new Intent(getBaseContext(), InstalledAppsActivity.class);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +54,11 @@ public class FavouriteAppsActivity extends Activity {
                 FLAG_LAYOUT_NO_LIMITS);
         setContentView(R.layout.activity_favourites);
         loadFavouritesFromPreferences();
-
-        AttitudeHelper.applyPadding(fetchAppList(createNewAdapter()), ScreenUtils.getDisplay(getApplicationContext()));
-        installedAppsIntent = new Intent(getBaseContext(), InstalledAppsActivity.class);
+        adapter = createNewAdapter();
+        listView = findViewById(R.id.mobile_list);
+        listView.setAdapter(adapter);
+        fetchAppList();
+        AttitudeHelper.applyPadding(listView, ScreenUtils.getDisplay(getApplicationContext()));
     }
 
     private void loadFavouritesFromPreferences() {
@@ -91,9 +87,7 @@ public class FavouriteAppsActivity extends Activity {
         };
     }
 
-    private ListView fetchAppList(ArrayAdapter adapter) {
-        ListView listView = (ListView) findViewById(R.id.mobile_list);
-        packageNames.clear();
+    private void fetchAppList() {
         adapter.clear();
 
         List<ComponentName> componentNames = new ArrayList<>();
@@ -117,8 +111,7 @@ public class FavouriteAppsActivity extends Activity {
         for (String app : apps) {
             adapter.add(app);
         }
-        listView.setAdapter(adapter);
-        return setActions(listView);
+        setActions();
     }
 
     private String getApplicationLabel(ComponentName componentName) {
@@ -135,11 +128,10 @@ public class FavouriteAppsActivity extends Activity {
         text.setHighlightColor(getResources().getColor(R.color.colorTextPrimary));
     }
 
-    private ListView setActions(ListView listView) {
+    private void setActions() {
         onClickHandler(listView);
         onLongPressHandler(listView);
         onSwipeHandler(listView);
-        return listView;
     }
 
     private void onClickHandler(ListView listView) {
@@ -174,7 +166,7 @@ public class FavouriteAppsActivity extends Activity {
                         alertDialog.setMessage("Do you want to remove this application from your favourites?");
                         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                favouriteAppsActivity.removeFavourite(position, listView);
+                                favouriteAppsActivity.removeFavourite(position);
                                 Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -198,7 +190,7 @@ public class FavouriteAppsActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        startActivity(installedAppsIntent);
+        startActivity(new Intent(getBaseContext(), InstalledAppsActivity.class));
         overridePendingTransition(R.anim.slide_up, android.R.anim.fade_out);
     }
 
@@ -225,8 +217,8 @@ public class FavouriteAppsActivity extends Activity {
         }
 
         builder.setItems(smallAdapter.toArray(new CharSequence[smallAdapter.size()]), (dialog, which) -> {
-            setFavourite(smallPackageNames, which, listView);
-            fetchAppList((ArrayAdapter) listView.getAdapter());
+            setFavourite(smallPackageNames, which);
+            fetchAppList();
         });
         builder.show();
     }
@@ -239,18 +231,6 @@ public class FavouriteAppsActivity extends Activity {
         return activities;
     }
 
-    private void setFavourite(List<String> smallPackageNames, int which, ListView listView) {
-        packageNames.add(smallPackageNames.get(which));
-        updateFavouritesInPreferences();
-        loadListView(listView);
-    }
-
-    private void loadListView(ListView listView) {
-        loadFavouritesFromPreferences();
-        fetchAppList((ArrayAdapter) listView.getAdapter());
-        AttitudeHelper.applyPadding(fetchAppList(createNewAdapter()), ScreenUtils.getDisplay(getApplicationContext()));
-    }
-
     private void updateFavouritesInPreferences() {
         if (packageNames.isEmpty()) {
             preferences.edit().putString(FAVS, "").commit();
@@ -259,12 +239,24 @@ public class FavouriteAppsActivity extends Activity {
         }
     }
 
-    private void removeFavourite(int position, ListView listView) {
+    private void setFavourite(List<String> smallPackageNames, int which) {
+        packageNames.add(smallPackageNames.get(which));
+        updateFavouritesInPreferences();
+        loadListView();
+    }
+
+    private void removeFavourite(int position) {
         if (position < packageNames.size()) {
             packageNames.remove(position);
             updateFavouritesInPreferences();
-            loadListView(listView);
+            loadListView();
         }
+    }
+
+    private void loadListView() {
+        loadFavouritesFromPreferences();
+        fetchAppList();
+        AttitudeHelper.applyPadding(listView, ScreenUtils.getDisplay(getApplicationContext()));
     }
 
     private void toggleTextViewBackground(View selectedItem, Long millis) {
