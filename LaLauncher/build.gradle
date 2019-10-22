@@ -5,8 +5,8 @@ android {
         applicationId 'com.github.postapczuk.lalauncher'
         minSdkVersion 5
         targetSdkVersion 26
-        versionCode 12
-        versionName '1.7.0'
+        versionCode 13
+        versionName '1.7.1'
     }
     buildTypes {
         release {

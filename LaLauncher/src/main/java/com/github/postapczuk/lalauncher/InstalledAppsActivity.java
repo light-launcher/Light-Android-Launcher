@@ -29,9 +29,20 @@ import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 public class InstalledAppsActivity extends Activity {
 
     private List<String> packageNames = new ArrayList<>();
+    private ArrayAdapter<String> adapter;
+    private ListView listView;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getActivities(getPackageManager()).size() - 1 != packageNames.size()) {
+            fetchAppList();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.getWindow().requestFeature(
                     FEATURE_ACTIVITY_TRANSITIONS);
@@ -39,9 +50,12 @@ public class InstalledAppsActivity extends Activity {
         this.getWindow().setFlags(
                 FLAG_LAYOUT_NO_LIMITS,
                 FLAG_LAYOUT_NO_LIMITS);
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_installed);
-        AttitudeHelper.applyPadding(fetchAppList(createNewAdapter()), ScreenUtils.getDisplay(getApplicationContext()));
+        adapter = createNewAdapter();
+        listView = findViewById(R.id.mobile_list);
+        listView.setAdapter(adapter);
+        fetchAppList();
+        AttitudeHelper.applyPadding(listView, ScreenUtils.getDisplay(getApplicationContext()));
     }
 
     private ArrayAdapter<String> createNewAdapter() {
@@ -59,8 +73,7 @@ public class InstalledAppsActivity extends Activity {
         };
     }
 
-    private ListView fetchAppList(ArrayAdapter adapter) {
-        ListView listView = (ListView) findViewById(R.id.mobile_list);
+    private void fetchAppList() {
         packageNames.clear();
         adapter.clear();
         for (ResolveInfo resolver : getActivities(getPackageManager())) {
@@ -70,9 +83,8 @@ public class InstalledAppsActivity extends Activity {
             adapter.add(appName);
             packageNames.add(resolver.activityInfo.packageName);
         }
-        listView.setAdapter(adapter);
         listView.setBackgroundColor(getResources().getColor(R.color.colorBackgroundPrimary));
-        return setActions(listView);
+        setActions();
     }
 
     private List<ResolveInfo> getActivities(PackageManager packageManager) {
@@ -87,14 +99,13 @@ public class InstalledAppsActivity extends Activity {
         text.setHighlightColor(getResources().getColor(R.color.colorTextPrimary));
     }
 
-    private ListView setActions(ListView listView) {
-        onClickHandler(listView);
-        onLongPressHandler(listView);
-        onSwipeHandler(listView);
-        return listView;
+    private void setActions() {
+        onClickHandler();
+        onLongPressHandler();
+        onSwipeHandler();
     }
 
-    private void onClickHandler(ListView listView) {
+    private void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             toggleTextviewBackground(view, 100L);
 
@@ -112,7 +123,7 @@ public class InstalledAppsActivity extends Activity {
     }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    private void onLongPressHandler(ListView listView) {
+    private void onLongPressHandler() {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             toggleTextviewBackground(view, 350L);
 
@@ -121,14 +132,14 @@ public class InstalledAppsActivity extends Activity {
                 intent.setData(Uri.parse("package:" + packageNames.get(position)));
                 startActivity(intent);
             } catch (ActivityNotFoundException e) {
-                fetchAppList((ArrayAdapter) listView.getAdapter());
+                fetchAppList();
             }
             return true;
         });
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void onSwipeHandler(ListView listView) {
+    private void onSwipeHandler() {
         listView.setOnTouchListener(new OnSwipeTouchListenerAllApps(this, listView) {
             public void onSwipeBottom() {
                 onBackPressed();
@@ -140,7 +151,6 @@ public class InstalledAppsActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(android.R.anim.fade_in, R.anim.slide_down);
-        this.finish();
     }
 
     private void toggleTextviewBackground(View selectedItem, Long millis) {
