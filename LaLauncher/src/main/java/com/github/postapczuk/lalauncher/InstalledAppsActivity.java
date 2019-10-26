@@ -12,10 +12,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +33,7 @@ import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 public class InstalledAppsActivity extends Activity {
 
     private List<String> packageNames = new ArrayList<>();
+    private List<String> appNamesPosition = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private ListView listView;
 
@@ -51,11 +56,34 @@ public class InstalledAppsActivity extends Activity {
                 FLAG_LAYOUT_NO_LIMITS,
                 FLAG_LAYOUT_NO_LIMITS);
         setContentView(R.layout.activity_installed);
+
+        EditText editTextFilter = (EditText) findViewById(R.id.searchFilter);
+        editTextFilter.setPadding(ScreenUtils.getDisplay(getApplicationContext()).getWidth()/12,ScreenUtils.getDisplay(getApplicationContext()).getHeight()/10,0,0);
+
+
         adapter = createNewAdapter();
         listView = findViewById(R.id.mobile_list);
         listView.setAdapter(adapter);
         fetchAppList();
         AttitudeHelper.applyPadding(listView, ScreenUtils.getDisplay(getApplicationContext()));
+
+        editTextFilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                (InstalledAppsActivity.this).adapter.getFilter().filter(charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
     }
 
     private ArrayAdapter<String> createNewAdapter() {
@@ -81,6 +109,7 @@ public class InstalledAppsActivity extends Activity {
             if (appName.equals("Light Android Launcher"))
                 continue;
             adapter.add(appName);
+            appNamesPosition.add(appName);
             packageNames.add(resolver.activityInfo.packageName);
         }
         listView.setBackgroundColor(getResources().getColor(R.color.colorBackgroundPrimary));
@@ -108,8 +137,8 @@ public class InstalledAppsActivity extends Activity {
     private void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             toggleTextviewBackground(view, 100L);
-
-            String packageName = packageNames.get(position);
+            String appName = parent.getItemAtPosition(position).toString();
+            String packageName = packageNames.get(appNamesPosition.indexOf(appName));
             try {
                 startActivity(getPackageManager().getLaunchIntentForPackage(packageName));
             } catch (Exception e) {
@@ -126,10 +155,10 @@ public class InstalledAppsActivity extends Activity {
     private void onLongPressHandler() {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             toggleTextviewBackground(view, 350L);
-
+            String appName = parent.getItemAtPosition(position).toString();
             try {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.parse("package:" + packageNames.get(position)));
+                intent.setData(Uri.parse("package:" + packageNames.get(appNamesPosition.indexOf(appName))));
                 startActivity(intent);
             } catch (ActivityNotFoundException e) {
                 fetchAppList();
