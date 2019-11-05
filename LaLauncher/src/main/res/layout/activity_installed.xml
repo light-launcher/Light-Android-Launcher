@@ -6,6 +6,17 @@
               android:orientation="vertical"
               android:background="@color/colorBackgroundPrimary"
               tools:context=".InstalledAppsActivity">
+
+    <EditText
+        android:id="@+id/searchFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackgroundPrimary"
+        android:ems="10"
+        android:hint="Search apps"
+        android:inputType="text"
+        android:textColor="@color/colorTextPrimary" />
+
     <ListView
             android:id="@+id/mobile_list"
             android:layout_width="match_parent"
