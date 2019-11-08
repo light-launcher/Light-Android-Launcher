@@ -16,15 +16,17 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import static android.view.Window.FEATURE_ACTIVITY_TRANSITIONS;
@@ -36,6 +38,7 @@ public class InstalledAppsActivity extends Activity {
     private List<String> appNamesPosition = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private ListView listView;
+    public EditText editTextFilter;
 
     @Override
     protected void onResume() {
@@ -58,14 +61,20 @@ public class InstalledAppsActivity extends Activity {
         setContentView(R.layout.activity_installed);
 
         EditText editTextFilter = (EditText) findViewById(R.id.searchFilter);
-        editTextFilter.setPadding(ScreenUtils.getDisplay(getApplicationContext()).getWidth()/12,ScreenUtils.getDisplay(getApplicationContext()).getHeight()/10,0,0);
+        TextView textViewSpacer1 = (TextView) findViewById(R.id.textViewSpacer1);
+        TextView textViewSpacer2 = (TextView) findViewById(R.id.textViewSpacer2);
 
+
+        editTextFilter.setVisibility(View.VISIBLE);
 
         adapter = createNewAdapter();
         listView = findViewById(R.id.mobile_list);
         listView.setAdapter(adapter);
         fetchAppList();
         AttitudeHelper.applyPadding(listView, ScreenUtils.getDisplay(getApplicationContext()));
+        AttitudeHelper.applySpacerPadding(textViewSpacer1, ScreenUtils.getDisplay(getApplicationContext()), 7);
+        AttitudeHelper.applySearchPadding(editTextFilter,ScreenUtils.getDisplay(getApplicationContext()));
+        AttitudeHelper.applySpacerPadding(textViewSpacer2, ScreenUtils.getDisplay(getApplicationContext()), 25);
 
         editTextFilter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -83,7 +92,6 @@ public class InstalledAppsActivity extends Activity {
 
             }
         });
-
     }
 
     private ArrayAdapter<String> createNewAdapter() {
@@ -135,6 +143,7 @@ public class InstalledAppsActivity extends Activity {
     }
 
     private void onClickHandler() {
+
         listView.setOnItemClickListener((parent, view, position, id) -> {
             toggleTextviewBackground(view, 100L);
             String appName = parent.getItemAtPosition(position).toString();
@@ -171,9 +180,10 @@ public class InstalledAppsActivity extends Activity {
     private void onSwipeHandler() {
         listView.setOnTouchListener(new OnSwipeTouchListenerAllApps(this, listView) {
             public void onSwipeBottom() {
-                onBackPressed();
-            }
+                    onBackPressed();
+                }
         });
+
     }
 
     @Override
@@ -181,6 +191,8 @@ public class InstalledAppsActivity extends Activity {
         super.onBackPressed();
         overridePendingTransition(android.R.anim.fade_in, R.anim.slide_down);
     }
+
+
 
     private void toggleTextviewBackground(View selectedItem, Long millis) {
         selectedItem.setBackgroundColor(getResources().getColor(R.color.colorBackgroundFavorite));
