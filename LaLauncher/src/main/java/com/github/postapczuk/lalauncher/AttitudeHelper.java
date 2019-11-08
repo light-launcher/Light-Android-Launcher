@@ -2,19 +2,36 @@ package com.github.postapczuk.lalauncher;
 
 import android.view.Display;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 abstract class AttitudeHelper {
     static ListView applyPadding(ListView listView, Display display) {
         listView.setClipToPadding(false);
         final int displayHeight = display.getHeight();
+        final int displayWidth = display.getWidth();
         int heightViewBasedTopPadding = displayHeight / 20;
         if (getTotalHeightOfListView(listView) < displayHeight - heightViewBasedTopPadding) {
             heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView(listView) / 2);
         }
+
         listView.setPadding(0, heightViewBasedTopPadding, 0, 0);
         return listView;
+    }
+
+    static EditText applySearchPadding(EditText editTextFilter, Display display) {
+        final int displayWidth = display.getWidth();
+        final int leftMarginRatio = 7;
+        editTextFilter.setPadding(0,0,0,0);
+        return editTextFilter;
+    }
+
+    static TextView applySpacerPadding(TextView textView, Display display, int width) {
+        final int displayWidth = display.getWidth();
+        textView.setPadding(0,displayWidth/width,0,0);
+        return textView;
     }
 
     private static int getTotalHeightOfListView(ListView listView) {
