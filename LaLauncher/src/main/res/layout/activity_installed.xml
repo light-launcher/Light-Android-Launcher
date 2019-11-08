@@ -4,8 +4,14 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
+                android:paddingLeft="60dip"
               android:background="@color/colorBackgroundPrimary"
               tools:context=".InstalledAppsActivity">
+
+    <TextView
+        android:id="@+id/textViewSpacer1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/searchFilter"
@@ -16,6 +22,11 @@
         android:hint="Search apps"
         android:inputType="text"
         android:textColor="@color/colorTextPrimary" />
+
+    <TextView
+        android:id="@+id/textViewSpacer2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <ListView
             android:id="@+id/mobile_list"
