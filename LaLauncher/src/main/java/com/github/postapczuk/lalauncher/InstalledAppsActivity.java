@@ -64,9 +64,6 @@ public class InstalledAppsActivity extends Activity {
         TextView textViewSpacer1 = (TextView) findViewById(R.id.textViewSpacer1);
         TextView textViewSpacer2 = (TextView) findViewById(R.id.textViewSpacer2);
 
-
-        editTextFilter.setVisibility(View.VISIBLE);
-
         adapter = createNewAdapter();
         listView = findViewById(R.id.mobile_list);
         listView.setAdapter(adapter);
@@ -76,6 +73,25 @@ public class InstalledAppsActivity extends Activity {
         AttitudeHelper.applySearchPadding(editTextFilter,ScreenUtils.getDisplay(getApplicationContext()));
         AttitudeHelper.applySpacerPadding(textViewSpacer2, ScreenUtils.getDisplay(getApplicationContext()), 25);
 
+        initializeSearchFilter(editTextFilter);
+    }
+
+    private ArrayAdapter<String> createNewAdapter() {
+        return new ArrayAdapter<String>(
+                this,
+                R.layout.activity_listview,
+                new ArrayList<>()
+        ) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView view = (TextView) super.getView(position, convertView, parent);
+                setTextColoring(view);
+                return view;
+            }
+        };
+    }
+
+    private void initializeSearchFilter(EditText editTextFilter) {
         editTextFilter.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -92,21 +108,6 @@ public class InstalledAppsActivity extends Activity {
 
             }
         });
-    }
-
-    private ArrayAdapter<String> createNewAdapter() {
-        return new ArrayAdapter<String>(
-                this,
-                R.layout.activity_listview,
-                new ArrayList<>()
-        ) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView view = (TextView) super.getView(position, convertView, parent);
-                setTextColoring(view);
-                return view;
-            }
-        };
     }
 
     private void fetchAppList() {
