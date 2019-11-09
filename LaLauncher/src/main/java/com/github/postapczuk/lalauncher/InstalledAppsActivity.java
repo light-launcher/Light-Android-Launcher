@@ -37,6 +37,7 @@ public class InstalledAppsActivity extends Activity {
     private List<String> packageNames = new ArrayList<>();
     private List<String> appNamesPosition = new ArrayList<>();
     private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> packageLookupAdapter;
     private ListView listView;
     public EditText editTextFilter;
 
@@ -65,6 +66,7 @@ public class InstalledAppsActivity extends Activity {
         TextView textViewSpacer2 = (TextView) findViewById(R.id.textViewSpacer2);
 
         adapter = createNewAdapter();
+        packageLookupAdapter = createNewAdapter();
         listView = findViewById(R.id.mobile_list);
         listView.setAdapter(adapter);
         fetchAppList();
@@ -101,6 +103,7 @@ public class InstalledAppsActivity extends Activity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 (InstalledAppsActivity.this).adapter.getFilter().filter(charSequence);
+                (InstalledAppsActivity.this).packageLookupAdapter.getFilter().filter(charSequence);
             }
 
             @Override
@@ -118,8 +121,8 @@ public class InstalledAppsActivity extends Activity {
             if (appName.equals("Light Android Launcher"))
                 continue;
             adapter.add(appName);
-            appNamesPosition.add(appName);
-            packageNames.add(resolver.activityInfo.packageName);
+            String reference = appName+"||"+resolver.activityInfo.packageName;
+            packageLookupAdapter.add(reference);
         }
         listView.setBackgroundColor(getResources().getColor(R.color.colorBackgroundPrimary));
         setActions();
@@ -143,12 +146,17 @@ public class InstalledAppsActivity extends Activity {
         onSwipeHandler();
     }
 
+    private String returnPackageName(int position) {
+        String[] packageReference = packageLookupAdapter.getItem(position).toString().split("[||]");
+        String packageName = packageReference[packageReference.length-1];
+        return packageName;
+    }
+
     private void onClickHandler() {
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
             toggleTextviewBackground(view, 100L);
-            String appName = parent.getItemAtPosition(position).toString();
-            String packageName = packageNames.get(appNamesPosition.indexOf(appName));
+            String packageName = returnPackageName(position);
             try {
                 startActivity(getPackageManager().getLaunchIntentForPackage(packageName));
             } catch (Exception e) {
@@ -165,10 +173,10 @@ public class InstalledAppsActivity extends Activity {
     private void onLongPressHandler() {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             toggleTextviewBackground(view, 350L);
-            String appName = parent.getItemAtPosition(position).toString();
+            String packageName = returnPackageName(position);
             try {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.parse("package:" + packageNames.get(appNamesPosition.indexOf(appName))));
+                intent.setData(Uri.parse("package:" + packageName));
                 startActivity(intent);
             } catch (ActivityNotFoundException e) {
                 fetchAppList();
