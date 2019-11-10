@@ -16,12 +16,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Space;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,14 +53,16 @@ public class InstalledAppsActivity extends Activity {
         setContentView(R.layout.activity_installed);
 
         EditText editTextFilter = (EditText) findViewById(R.id.searchFilter);
-        editTextFilter.setPadding(ScreenUtils.getDisplay(getApplicationContext()).getWidth()/12,ScreenUtils.getDisplay(getApplicationContext()).getHeight()/10,0,0);
+        int horizontalPadding = ScreenUtils.getDisplay(getApplicationContext()).getWidth() / 12;
+        int topPadding = ScreenUtils.getDisplay(getApplicationContext()).getHeight() / 10;
+        int bottomPadding = topPadding / 4;
+        editTextFilter.setPadding(horizontalPadding, topPadding, horizontalPadding, bottomPadding);
 
 
         adapter = createNewAdapter();
         listView = findViewById(R.id.mobile_list);
         listView.setAdapter(adapter);
         fetchAppList();
-        AttitudeHelper.applyPadding(listView, ScreenUtils.getDisplay(getApplicationContext()));
 
         editTextFilter.addTextChangedListener(new TextWatcher() {
             @Override

@@ -9,7 +9,7 @@ abstract class AttitudeHelper {
     static ListView applyPadding(ListView listView, Display display) {
         listView.setClipToPadding(false);
         final int displayHeight = display.getHeight();
-        int heightViewBasedTopPadding = displayHeight / 20;
+        int heightViewBasedTopPadding = displayHeight / 6;
         if (getTotalHeightOfListView(listView) < displayHeight - heightViewBasedTopPadding) {
             heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView(listView) / 2);
         }
