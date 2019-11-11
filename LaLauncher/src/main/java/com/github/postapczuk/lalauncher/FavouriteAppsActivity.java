@@ -157,6 +157,10 @@ public class FavouriteAppsActivity extends Activity {
 
     private void onLongPressHandler(ListView listView) {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            if (position == packageNames.size() || packageNames.get(position).equals("")) {
+                return true;
+            }
+
             toggleTextViewBackground(view, 350L);
             FavouriteAppsActivity favouriteAppsActivity = this;
 
@@ -171,8 +175,6 @@ public class FavouriteAppsActivity extends Activity {
                             }
                         });
                         alertDialog.show();
-
-
                     }
                     , 350L));
             return true;
