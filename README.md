@@ -5,7 +5,7 @@ Configurable, minimalistic, super lightweight app launcher with a low memory usa
 ---------------------------------------------------------------------------------------------------------
 
 <p align="center">
-  <img src="https://github.com/light-launcher/Light-Android-Launcher/raw/master/SCR_20190311_165639.gif" style="max-height:600px"/>
+  <img src="https://www.dropbox.com/s/6wjkxgddykattdb/preview.gif?dl=0" style="max-height:600px"/>
 </p>
 
 Functionalities
