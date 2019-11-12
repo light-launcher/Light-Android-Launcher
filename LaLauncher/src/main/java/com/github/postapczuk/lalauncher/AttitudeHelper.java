@@ -12,20 +12,12 @@ abstract class AttitudeHelper {
         listView.setClipToPadding(false);
         final int displayHeight = display.getHeight();
         final int displayWidth = display.getWidth();
-        int heightViewBasedTopPadding = displayHeight / 20;
-        int heightViewBasedTopPadding = displayHeight / 6;
+        int heightViewBasedTopPadding = displayHeight / 100;
         if (getTotalHeightOfListView(listView) < displayHeight - heightViewBasedTopPadding) {
             heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView(listView) / 2);
         }
         listView.setPadding(0, heightViewBasedTopPadding, 0, 0);
         return listView;
-    }
-
-    static EditText applySearchPadding(EditText editTextFilter, Display display) {
-        final int displayWidth = display.getWidth();
-        final int leftMarginRatio = 7;
-        editTextFilter.setPadding(0,0,0,0);
-        return editTextFilter;
     }
 
     static TextView applySpacerPadding(TextView textView, Display display, int width) {
