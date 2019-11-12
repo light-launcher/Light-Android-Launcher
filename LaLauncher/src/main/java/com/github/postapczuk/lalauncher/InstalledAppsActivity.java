@@ -40,6 +40,7 @@ public class InstalledAppsActivity extends Activity {
     private ArrayAdapter<String> packageLookupAdapter;
     private ListView listView;
     public EditText editTextFilter;
+    private TextWatcher searchWatcher;
 
     @Override
     protected void onResume() {
@@ -62,18 +63,19 @@ public class InstalledAppsActivity extends Activity {
         setContentView(R.layout.activity_installed);
 
         EditText editTextFilter = (EditText) findViewById(R.id.searchFilter);
-        TextView textViewSpacer1 = (TextView) findViewById(R.id.textViewSpacer1);
-        TextView textViewSpacer2 = (TextView) findViewById(R.id.textViewSpacer2);
+        TextView spacerAboveSearch = (TextView) findViewById(R.id.textViewSpacer1);
+        TextView spacerBelowSearch = (TextView) findViewById(R.id.textViewSpacer2);
 
         adapter = createNewAdapter();
         packageLookupAdapter = createNewAdapter();
         listView = findViewById(R.id.mobile_list);
         listView.setAdapter(adapter);
         fetchAppList();
+
         AttitudeHelper.applyPadding(listView, ScreenUtils.getDisplay(getApplicationContext()));
-        AttitudeHelper.applySpacerPadding(textViewSpacer1, ScreenUtils.getDisplay(getApplicationContext()), 7);
+        AttitudeHelper.applySpacerPadding(spacerAboveSearch, ScreenUtils.getDisplay(getApplicationContext()), 7);
         AttitudeHelper.applySearchPadding(editTextFilter,ScreenUtils.getDisplay(getApplicationContext()));
-        AttitudeHelper.applySpacerPadding(textViewSpacer2, ScreenUtils.getDisplay(getApplicationContext()), 25);
+        AttitudeHelper.applySpacerPadding(spacerBelowSearch, ScreenUtils.getDisplay(getApplicationContext()), 25);
 
         initializeSearchFilter(editTextFilter);
     }
@@ -94,7 +96,7 @@ public class InstalledAppsActivity extends Activity {
     }
 
     private void initializeSearchFilter(EditText editTextFilter) {
-        editTextFilter.addTextChangedListener(new TextWatcher() {
+         TextWatcher searchWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -110,7 +112,8 @@ public class InstalledAppsActivity extends Activity {
             public void afterTextChanged(Editable editable) {
 
             }
-        });
+         };
+        editTextFilter.addTextChangedListener(searchWatcher);
     }
 
     private void fetchAppList() {
@@ -189,10 +192,9 @@ public class InstalledAppsActivity extends Activity {
     private void onSwipeHandler() {
         listView.setOnTouchListener(new OnSwipeTouchListenerAllApps(this, listView) {
             public void onSwipeBottom() {
-                    onBackPressed();
-                }
+                onBackPressed();
+            }
         });
-
     }
 
     @Override
@@ -200,8 +202,6 @@ public class InstalledAppsActivity extends Activity {
         super.onBackPressed();
         overridePendingTransition(android.R.anim.fade_in, R.anim.slide_down);
     }
-
-
 
     private void toggleTextviewBackground(View selectedItem, Long millis) {
         selectedItem.setBackgroundColor(getResources().getColor(R.color.colorBackgroundFavorite));
