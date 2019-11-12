@@ -6,7 +6,7 @@
           android:layout_height="fill_parent"
           android:paddingTop="20dip"
           android:paddingBottom="20dip"
-          android:paddingLeft="0dip"
+          android:paddingLeft="60dip"
           android:paddingRight="21dip"
           android:paddingStart="60dip"
           android:paddingEnd="21dip"
