@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.*;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -65,12 +66,20 @@ public class InstalledAppsActivity extends Activity {
         EditText editTextFilter = (EditText) findViewById(R.id.searchFilter);
         TextView spacerAboveSearch = (TextView) findViewById(R.id.spacerAboveSearch);
         TextView spacerBelowSearch = (TextView) findViewById(R.id.spacerBelowSearch);
+        int horizontalPadding = ScreenUtils.getDisplay(getApplicationContext()).getWidth() / 12;
+        int topPadding = ScreenUtils.getDisplay(getApplicationContext()).getHeight() / 10;
+        int bottomPadding = topPadding / 4;
+        editTextFilter.setPadding(horizontalPadding, topPadding, horizontalPadding, bottomPadding);
 
         adapter = createNewAdapter();
         packageLookupAdapter = createNewAdapter();
         listView = findViewById(R.id.mobile_list);
         listView.setAdapter(adapter);
         fetchAppList();
+
+        editTextFilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
         AttitudeHelper.applyPadding(listView, ScreenUtils.getDisplay(getApplicationContext()));
         AttitudeHelper.applySpacerPadding(spacerAboveSearch, ScreenUtils.getDisplay(getApplicationContext()), 7);

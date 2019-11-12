@@ -13,10 +13,10 @@ abstract class AttitudeHelper {
         final int displayHeight = display.getHeight();
         final int displayWidth = display.getWidth();
         int heightViewBasedTopPadding = displayHeight / 20;
+        int heightViewBasedTopPadding = displayHeight / 6;
         if (getTotalHeightOfListView(listView) < displayHeight - heightViewBasedTopPadding) {
             heightViewBasedTopPadding = (displayHeight / 2) - (getTotalHeightOfListView(listView) / 2);
         }
-
         listView.setPadding(0, heightViewBasedTopPadding, 0, 0);
         return listView;
     }
