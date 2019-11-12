@@ -9,7 +9,7 @@
               tools:context=".InstalledAppsActivity">
 
     <TextView
-        android:id="@+id/textViewSpacer1"
+        android:id="@+id/spacerAboveSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -24,7 +24,7 @@
         android:textColor="@color/colorTextPrimary" />
 
     <TextView
-        android:id="@+id/textViewSpacer2"
+        android:id="@+id/spacerBelowSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
