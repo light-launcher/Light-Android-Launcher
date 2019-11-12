@@ -63,8 +63,8 @@ public class InstalledAppsActivity extends Activity {
         setContentView(R.layout.activity_installed);
 
         EditText editTextFilter = (EditText) findViewById(R.id.searchFilter);
-        TextView spacerAboveSearch = (TextView) findViewById(R.id.textViewSpacer1);
-        TextView spacerBelowSearch = (TextView) findViewById(R.id.textViewSpacer2);
+        TextView spacerAboveSearch = (TextView) findViewById(R.id.spacerAboveSearch);
+        TextView spacerBelowSearch = (TextView) findViewById(R.id.spacerBelowSearch);
 
         adapter = createNewAdapter();
         packageLookupAdapter = createNewAdapter();
