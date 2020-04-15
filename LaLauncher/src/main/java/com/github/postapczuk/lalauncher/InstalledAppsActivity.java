@@ -132,8 +132,7 @@ public class InstalledAppsActivity extends Activity {
     private void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             toggleTextviewBackground(view, 100L);
-            String appName = parent.getItemAtPosition(position).toString();
-            String packageName = packageNames.get(appNamesPosition.indexOf(appName));
+            String packageName = packageNames.get(position);
             try {
                 startActivity(getPackageManager().getLaunchIntentForPackage(packageName));
             } catch (Exception e) {
@@ -150,10 +149,9 @@ public class InstalledAppsActivity extends Activity {
     private void onLongPressHandler() {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             toggleTextviewBackground(view, 350L);
-            String appName = parent.getItemAtPosition(position).toString();
             try {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.parse("package:" + packageNames.get(appNamesPosition.indexOf(appName))));
+                intent.setData(Uri.parse("package:" + packageNames.get(position)));
                 startActivity(intent);
             } catch (ActivityNotFoundException e) {
                 fetchAppList();
