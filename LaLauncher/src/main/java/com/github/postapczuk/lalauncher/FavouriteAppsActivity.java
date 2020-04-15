@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE;
-import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 
 public class FavouriteAppsActivity extends Activity {
 
@@ -49,9 +49,8 @@ public class FavouriteAppsActivity extends Activity {
             getWindow().getDecorView().setSystemUiVisibility(
                     SYSTEM_UI_FLAG_LOW_PROFILE);
         }
-        getWindow().setFlags(
-                FLAG_LAYOUT_NO_LIMITS,
-                FLAG_LAYOUT_NO_LIMITS);
+
+        getWindow().setFlags(FLAG_LAYOUT_IN_SCREEN, FLAG_LAYOUT_IN_SCREEN);
         setContentView(R.layout.activity_favourites);
         loadFavouritesFromPreferences();
         adapter = createNewAdapter();
