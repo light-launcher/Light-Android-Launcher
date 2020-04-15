@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static android.view.Window.FEATURE_ACTIVITY_TRANSITIONS;
-import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 
 public class InstalledAppsActivity extends Activity {
 
@@ -47,9 +47,7 @@ public class InstalledAppsActivity extends Activity {
             this.getWindow().requestFeature(
                     FEATURE_ACTIVITY_TRANSITIONS);
         }
-        this.getWindow().setFlags(
-                FLAG_LAYOUT_NO_LIMITS,
-                FLAG_LAYOUT_NO_LIMITS);
+        this.getWindow().setFlags(FLAG_LAYOUT_IN_SCREEN, FLAG_LAYOUT_IN_SCREEN);
         setContentView(R.layout.activity_installed);
 
         EditText editTextFilter = (EditText) findViewById(R.id.searchFilter);
