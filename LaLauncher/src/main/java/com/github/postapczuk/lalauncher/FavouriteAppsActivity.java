@@ -191,7 +191,7 @@ public class FavouriteAppsActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(getBaseContext(), InstalledAppsActivity.class));
+        startActivityIfNeeded(new Intent(getBaseContext(), InstalledAppsActivity.class), 0);
         overridePendingTransition(R.anim.slide_up, android.R.anim.fade_out);
     }
 
@@ -257,7 +257,6 @@ public class FavouriteAppsActivity extends Activity {
     private void loadListView() {
         loadFavouritesFromPreferences();
         fetchAppList();
-        AttitudeHelper.applyPadding(listView, ScreenUtils.getDisplay(getApplicationContext()));
     }
 
     private void toggleTextViewBackground(View selectedItem, Long millis) {

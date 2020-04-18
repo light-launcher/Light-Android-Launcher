@@ -35,7 +35,7 @@ public class InstalledAppsActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (getActivities(getPackageManager()).size() - 1 != packageNames.size()) {
+        if (appNamesPosition.size() != packageNames.size()) {
             fetchAppList();
         }
     }
@@ -99,8 +99,9 @@ public class InstalledAppsActivity extends Activity {
     private void fetchAppList() {
         packageNames.clear();
         adapter.clear();
-        for (ResolveInfo resolver : getActivities(getPackageManager())) {
-            String appName = (String) resolver.loadLabel(getPackageManager());
+        PackageManager packageManager = getPackageManager();
+        for (ResolveInfo resolver : getActivities(packageManager)) {
+            String appName = (String) resolver.loadLabel(packageManager);
             if (appName.equals("Light Android Launcher"))
                 continue;
             adapter.add(appName);
