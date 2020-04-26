@@ -35,7 +35,7 @@ public class InstalledAppsActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (appNamesPosition.size() != packageNames.size()) {
+        if (getActivities(getPackageManager()).size() - 1 != packageNames.size()) {
             fetchAppList();
         }
     }
