@@ -131,7 +131,7 @@ public class FavouriteAppsActivity extends Activity {
         onClickHandler(listView);
         onLongPressHandler(listView);
         onSwipeHandler(listView);
-        onClickHandlerForSwipeIcon(swipeIcon);
+        onClickAndSwipeHandlerForSwipeIcon(swipeIcon);
     }
 
     private void onClickHandler(ListView listView) {
@@ -181,8 +181,14 @@ public class FavouriteAppsActivity extends Activity {
         });
     }
 
-    private void onClickHandlerForSwipeIcon(ImageView imageView) {
+    @SuppressLint("ClickableViewAccessibility")
+    private void onClickAndSwipeHandlerForSwipeIcon(ImageView imageView) {
         imageView.setOnClickListener((listener) -> onBackPressed());
+        imageView.setOnTouchListener(new OnSwipeTouchListenerSwipeArrow(this) {
+            public void onSwipeTop() {
+                onBackPressed();
+            }
+        });
     }
 
     @SuppressLint("ClickableViewAccessibility")

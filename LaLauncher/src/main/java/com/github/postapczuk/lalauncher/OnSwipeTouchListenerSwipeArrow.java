@@ -6,11 +6,11 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class OnSwipeTouchListenerMain implements View.OnTouchListener {
+public class OnSwipeTouchListenerSwipeArrow implements View.OnTouchListener {
 
     private final GestureDetector gestureDetector;
 
-    OnSwipeTouchListenerMain(Context ctx) {
+    OnSwipeTouchListenerSwipeArrow(Context ctx) {
         gestureDetector = new GestureDetector(ctx, new GestureListener(ctx));
     }
 
@@ -46,18 +46,8 @@ public class OnSwipeTouchListenerMain implements View.OnTouchListener {
 
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
-                if (Math.abs(diffX) > Math.abs(diffY)) {
-                    if (Math.abs(diffX) > width / 5 && Math.abs(velocityX) > height / 5) {
-                        if (diffX > 0) {
-                            onSwipeRight();
-                            result = true;
-                        } else {
-                            onSwipeLeft();
-                            result = true;
-                        }
-                    }
-                } else if (Math.abs(diffY) > Math.abs(diffX)) {
-                    if (Math.abs(diffY) > width / 5 && Math.abs(velocityY) > width / 5 && diffY <= 0 && e1.getY() > height - (height / 5)) {
+                if (Math.abs(diffY) > Math.abs(diffX)) {
+                    if (Math.abs(diffY) > width / 5 && Math.abs(velocityY) > width / 5) {
                         onSwipeTop();
                         result = true;
                     }
