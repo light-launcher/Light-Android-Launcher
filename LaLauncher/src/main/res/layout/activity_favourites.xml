@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:background="@color/colorBackgroundDimmed"
-              tools:context=".FavouriteAppsActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/colorBackgroundDimmed"
+                tools:context=".FavouriteAppsActivity">
     <ListView
             android:id="@+id/mobile_list"
             android:layout_width="match_parent"
@@ -15,4 +15,14 @@
             android:dividerHeight="0dp"
             android:listSelector="@color/colorTransparent"
     />
-</LinearLayout>
+
+    <ImageView
+            android:id="@+id/swipe_icon"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_above="@id/mobile_list"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true" android:src="@drawable/fold_icon"
+            android:layout_alignParentBottom="true" android:clickable="true"/>
+
+</RelativeLayout>

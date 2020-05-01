@@ -16,10 +16,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import java8.util.Comparators;
 
 import java.util.ArrayList;
@@ -42,6 +39,8 @@ public class FavouriteAppsActivity extends Activity {
     private SharedPreferences preferences;
     private List<String> favourites = new ArrayList<String>();
 
+    private ImageView swipeIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +54,9 @@ public class FavouriteAppsActivity extends Activity {
         loadFavouritesFromPreferences();
         adapter = createNewAdapter();
         listView = findViewById(R.id.mobile_list);
+        swipeIcon = findViewById(R.id.swipe_icon);
         listView.setAdapter(adapter);
         fetchAppList();
-        AttitudeHelper.applyPadding(listView, ScreenUtils.getDisplay(getApplicationContext()));
     }
 
     private void loadFavouritesFromPreferences() {
@@ -111,6 +110,7 @@ public class FavouriteAppsActivity extends Activity {
             adapter.add(app);
         }
         setActions();
+        AttitudeHelper.applyPadding(listView, ScreenUtils.getDisplay(getApplicationContext()));
     }
 
     private String getApplicationLabel(ComponentName componentName) {
@@ -131,6 +131,7 @@ public class FavouriteAppsActivity extends Activity {
         onClickHandler(listView);
         onLongPressHandler(listView);
         onSwipeHandler(listView);
+        onClickHandlerForSwipeIcon(swipeIcon);
     }
 
     private void onClickHandler(ListView listView) {
@@ -178,6 +179,10 @@ public class FavouriteAppsActivity extends Activity {
                     , 350L));
             return true;
         });
+    }
+
+    private void onClickHandlerForSwipeIcon(ImageView imageView) {
+        imageView.setOnClickListener((listener) -> onBackPressed());
     }
 
     @SuppressLint("ClickableViewAccessibility")
