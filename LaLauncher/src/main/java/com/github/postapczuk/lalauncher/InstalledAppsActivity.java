@@ -73,12 +73,15 @@ public class InstalledAppsActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                CharSequence lowered = charSequence.toString().toLowerCase();
+                String lowered = charSequence.toString().toLowerCase();
                 (InstalledAppsActivity.this).adapter.getFilter().filter(charSequence);
                 List<Pair<String, String>> list = new ArrayList<>();
                 for (Pair<String, String> entry : appsPosition) {
-                    if (entry.first.toLowerCase().contains(lowered)) {
-                        list.add(entry);
+                    for (String word : entry.first.toLowerCase().split("\\s+")) {
+                        if (word.startsWith(lowered)) {
+                            list.add(entry);
+                            break;
+                        }
                     }
                 }
                 appsPosition = list;
