@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -27,16 +28,18 @@ import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 
 public class InstalledAppsActivity extends Activity {
 
-    private List<String> packageNames = new ArrayList<>();
-    private List<String> appNamesPosition = new ArrayList<>();
+    private List<Pair<String, String>> appsPosition = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private ListView listView;
+
+    private EditText editTextFilter;
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (getActivities(getPackageManager()).size() - 1 != packageNames.size()) {
+        if (getActivities(getPackageManager()).size() - 1 != appsPosition.size()) {
             fetchAppList();
+            editTextFilter.getText().clear();
         }
     }
 
@@ -50,7 +53,7 @@ public class InstalledAppsActivity extends Activity {
         this.getWindow().setFlags(FLAG_LAYOUT_IN_SCREEN, FLAG_LAYOUT_IN_SCREEN);
         setContentView(R.layout.activity_installed);
 
-        EditText editTextFilter = (EditText) findViewById(R.id.searchFilter);
+        editTextFilter = (EditText) findViewById(R.id.searchFilter);
         int horizontalPadding = ScreenUtils.getDisplay(getApplicationContext()).getWidth() / 12;
         int topPadding = ScreenUtils.getDisplay(getApplicationContext()).getHeight() / 10;
         int bottomPadding = topPadding / 4;
@@ -70,7 +73,15 @@ public class InstalledAppsActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                CharSequence lowered = charSequence.toString().toLowerCase();
                 (InstalledAppsActivity.this).adapter.getFilter().filter(charSequence);
+                List<Pair<String, String>> list = new ArrayList<>();
+                for (Pair<String, String> entry : appsPosition) {
+                    if (entry.first.toLowerCase().contains(lowered)) {
+                        list.add(entry);
+                    }
+                }
+                appsPosition = list;
             }
 
             @Override
@@ -97,7 +108,7 @@ public class InstalledAppsActivity extends Activity {
     }
 
     private void fetchAppList() {
-        packageNames.clear();
+        appsPosition.clear();
         adapter.clear();
         PackageManager packageManager = getPackageManager();
         for (ResolveInfo resolver : getActivities(packageManager)) {
@@ -105,8 +116,7 @@ public class InstalledAppsActivity extends Activity {
             if (appName.equals("Light Android Launcher"))
                 continue;
             adapter.add(appName);
-            appNamesPosition.add(appName);
-            packageNames.add(resolver.activityInfo.packageName);
+            appsPosition.add(Pair.create(appName, resolver.activityInfo.packageName));
         }
         listView.setBackgroundColor(getResources().getColor(R.color.colorBackgroundPrimary));
         setActions();
@@ -133,7 +143,7 @@ public class InstalledAppsActivity extends Activity {
     private void onClickHandler() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             toggleTextviewBackground(view, 100L);
-            String packageName = packageNames.get(position);
+            String packageName = appsPosition.get(position).second;
             try {
                 startActivity(getPackageManager().getLaunchIntentForPackage(packageName));
             } catch (Exception e) {
@@ -152,7 +162,7 @@ public class InstalledAppsActivity extends Activity {
             toggleTextviewBackground(view, 350L);
             try {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.parse("package:" + packageNames.get(position)));
+                intent.setData(Uri.parse("package:" + appsPosition.get(position).second));
                 startActivity(intent);
             } catch (ActivityNotFoundException e) {
                 fetchAppList();
