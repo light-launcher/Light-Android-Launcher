@@ -22,6 +22,8 @@ import android.widget.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static android.view.Window.FEATURE_ACTIVITY_TRANSITIONS;
 import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
@@ -34,11 +36,12 @@ public class InstalledAppsActivity extends Activity {
 
     private EditText editTextFilter;
 
+    private ReadWriteLock lock = new ReentrantReadWriteLock();
+
     @Override
     protected void onResume() {
         super.onResume();
         if (getActivities(getPackageManager()).size() - 1 != appsPosition.size()) {
-            fetchAppList();
             editTextFilter.getText().clear();
         }
     }
@@ -68,23 +71,29 @@ public class InstalledAppsActivity extends Activity {
         editTextFilter.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                fetchAppList();
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String lowered = charSequence.toString().toLowerCase();
-                (InstalledAppsActivity.this).adapter.getFilter().filter(charSequence);
+                lock.readLock().lock();
                 List<Pair<String, String>> list = new ArrayList<>();
                 for (Pair<String, String> entry : appsPosition) {
-                    for (String word : entry.first.toLowerCase().split("\\s+")) {
-                        if (word.startsWith(lowered)) {
-                            list.add(entry);
-                            break;
+                    if (lowered.length() == 0) {
+                        list.add(entry);
+                    } else {
+                        for (String word : entry.first.toLowerCase().split("\\s+")) {
+                            if (word.startsWith(lowered)) {
+                                list.add(entry);
+                                break;
+                            }
                         }
                     }
                 }
                 appsPosition = list;
+                (InstalledAppsActivity.this).adapter.getFilter().filter(charSequence);
+                lock.readLock().unlock();
             }
 
             @Override
@@ -111,10 +120,12 @@ public class InstalledAppsActivity extends Activity {
     }
 
     private void fetchAppList() {
+        PackageManager packageManager = getPackageManager();
+        List<ResolveInfo> activities = getActivities(packageManager);
+        lock.writeLock().lock();
         appsPosition.clear();
         adapter.clear();
-        PackageManager packageManager = getPackageManager();
-        for (ResolveInfo resolver : getActivities(packageManager)) {
+        for (ResolveInfo resolver : activities) {
             String appName = (String) resolver.loadLabel(packageManager);
             if (appName.equals("Light Android Launcher"))
                 continue;
@@ -123,6 +134,7 @@ public class InstalledAppsActivity extends Activity {
         }
         listView.setBackgroundColor(getResources().getColor(R.color.colorBackgroundPrimary));
         setActions();
+        lock.writeLock().unlock();
     }
 
     private List<ResolveInfo> getActivities(PackageManager packageManager) {
