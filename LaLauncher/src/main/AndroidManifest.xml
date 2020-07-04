@@ -4,24 +4,19 @@
     <application
             android:icon="@mipmap/ic_launcher"
             android:label="Light Android Launcher"
-            android:excludeFromRecents="true"
             android:clearTaskOnLaunch="true"
-            android:immersive="true"
             android:stateNotNeeded="true"
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
-            tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name=".FavouriteAppsActivity"
-                  android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.HOME" />
-            </intent-filter>
-        </activity>
+            tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
         <activity android:name=".InstalledAppsActivity"
                   android:launchMode="singleTask"
                   android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.HOME"/>
+            </intent-filter>
         </activity>
     </application>
 </manifest>

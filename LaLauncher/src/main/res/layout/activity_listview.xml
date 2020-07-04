@@ -8,7 +8,5 @@
           android:paddingBottom="20dip"
           android:paddingLeft="60dip"
           android:paddingRight="21dip"
-          android:paddingStart="60dip"
-          android:paddingEnd="21dip"
           android:textSize="21sp">
 </TextView>

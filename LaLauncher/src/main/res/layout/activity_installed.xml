@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
               android:orientation="vertical"
               android:background="@color/colorBackgroundPrimary"
               tools:context=".InstalledAppsActivity">
 
     <EditText
-        android:id="@+id/searchFilter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorBackgroundPrimary"
-        android:ems="10"
-        android:hint="Search apps"
-        android:inputType="text"
-        android:textColor="@color/colorTextPrimary" />
+            android:id="@+id/searchFilter"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackgroundPrimary"
+            android:ems="10"
+            android:hint="@string/search_apps"
+            android:inputType="text"
+            android:textColor="@color/colorTextPrimary"/>
 
     <ListView
             android:id="@+id/mobile_list"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:divider="@null"
-            android:dividerHeight="0dp"
             android:listSelector="@color/colorTransparent"
     />
 </LinearLayout>
