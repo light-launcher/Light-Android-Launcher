@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".InstalledAppsActivity"
-                  android:launchMode="singleTask">
+                  android:launchMode="singleTask"
+                  android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 </manifest>
