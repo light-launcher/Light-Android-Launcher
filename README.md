@@ -10,11 +10,13 @@ Configurable, minimalistic, super lightweight app launcher with a low memory usa
 
 Functionalities
 ===============
-1. Main screen allows you to add/remove favourite apps.
+1. Main screen allows you to add/remove favourite apps.*
 1. To access all-apps view, just swipe top vertically from bottom of your screen.
-1. Long press on all-apps view allows you to read info about app (API >= 9).
-1. To go back to favourites view press back button or swipe bottom vertically.
+1. Long press on all-apps view allows you to read info about app (API >= 9).*
+1. To go back to favourites view press back button or swipe bottom vertically.*
 1. Search box for installed apps.
+
+* Please take a note that due to issues with current Android's API versions e-paper version is limited and maintained on other repo (please check the further info)
 
 Get it on:
 ---------
@@ -27,9 +29,7 @@ Android version
 Works with each Android version from 2.0 (API 5)
 
 ### E-paper version
-One of the goals of the app is to provide smooth experience for older e-paper devices like Nook Simple Touch (NST).
-There is a separate development branch "epaper-ready" for this kind of devices. 
-The latest apk will always be under [this](https://www.dropbox.com/s/ci677hmb2s1la5w/LaLauncher-e-paper-unsigned.apk?dl=1) url.
+One of the goals of the app was to provide smooth experience for older e-paper devices like Nook Simple Touch (NST). Because of Android API changes I had to abandon this feature on this repo. **If you wish to get e-paper version** please go to [this](https://github.com/postapczuk/Light-ePaper-Launcher/releases) repo.
 
 Free & Open Source
 ==================
