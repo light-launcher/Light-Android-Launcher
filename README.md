@@ -10,19 +10,19 @@ Configurable, minimalistic, super lightweight app launcher with a low memory usa
 
 Functionalities
 ===============
-1. Main screen allows you to add/remove favourite apps.*
+1. Main screen allows you to add/remove favourite apps.
 1. To access all-apps view, just swipe top vertically from bottom of your screen.
-1. Long press on all-apps view allows you to read info about app (API >= 9).*
-1. To go back to favourites view press back button or swipe bottom vertically.*
+1. Long press on all-apps view allows you to read info about app (API >= 9).
+1. To go back to favourites view press back button or swipe bottom vertically.
 1. Search box for installed apps.
 
-* Please take a note that due to issues with current Android's API versions e-paper version is limited and maintained on other repo (please check the further info)
+_Please take a note that due to issues with current Android's API versions e-paper version is limited and maintained on other repo (please check the further info)._
 
 Get it on:
 ---------
-| Regular | E-paper |
-|---------|---------|
-| <a href="https://f-droid.org/packages/com.github.postapczuk.lalauncher/"><img src="https://github.com/light-launcher/Light-Android-Launcher/raw/master/get-it-on.png" alt="Get it on F-Droid" height="80"></a> | <a href="https://www.dropbox.com/s/ci677hmb2s1la5w/LaLauncher-e-paper-unsigned.apk?dl=1"><img src="https://github.com/light-launcher/Light-Android-Launcher/raw/master/DropBox-icon.png" alt="Get it from Dropbox" height="80"></a> |
+| Regular |
+|---------|
+| <a href="https://f-droid.org/packages/com.github.postapczuk.lalauncher/"><img src="https://github.com/light-launcher/Light-Android-Launcher/raw/master/get-it-on.png" alt="Get it on F-Droid" height="80"></a> |
 
 Android version
 ===============
