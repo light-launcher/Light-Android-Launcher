@@ -22,6 +22,7 @@ import android.widget.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -122,16 +123,38 @@ public class InstalledAppsActivity extends Activity {
     private void fetchAppList() {
         PackageManager packageManager = getPackageManager();
         List<ResolveInfo> activities = getActivities(packageManager);
+
         lock.writeLock().lock();
         appsPosition.clear();
         adapter.clear();
+
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        List<Callable<Pair<String, String>>> callables = new ArrayList<>();
         for (ResolveInfo resolver : activities) {
-            String appName = (String) resolver.loadLabel(packageManager);
-            if (appName.equals("Light Android Launcher"))
-                continue;
-            adapter.add(appName);
-            appsPosition.add(Pair.create(appName, resolver.activityInfo.packageName));
+            callables.add(() -> {
+                String appName = (String) resolver.loadLabel(packageManager);
+                if (appName.equals("Light Android Launcher"))
+                    return null;
+                return Pair.create(appName, resolver.activityInfo.packageName);
+            });
         }
+        try {
+            List<Future<Pair<String, String>>> futures = executorService.invokeAll(callables);
+            for (Future<Pair<String, String>> future : futures) {
+                Pair<String, String> appNameAndPackage = future.get();
+                if (appNameAndPackage != null) {
+                    adapter.add(appNameAndPackage.first);
+                    appsPosition.add(Pair.create(appNameAndPackage.first, appNameAndPackage.second));
+                }
+            }
+            executorService.shutdown();
+            executorService.awaitTermination(3, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+        } catch (ExecutionException e) {
+            throw new RuntimeException("Task execution exception during getting app name");
+        }
+
         listView.setBackgroundColor(getResources().getColor(R.color.colorBackgroundPrimary));
         setActions();
         lock.writeLock().unlock();
@@ -160,7 +183,9 @@ public class InstalledAppsActivity extends Activity {
             toggleTextviewBackground(view, 100L);
             String packageName = appsPosition.get(position).second;
             try {
-                startActivity(getPackageManager().getLaunchIntentForPackage(packageName));
+                Intent launchIntentForPackage = getPackageManager().getLaunchIntentForPackage(packageName)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(launchIntentForPackage);
             } catch (Exception e) {
                 Toast.makeText(
                         InstalledAppsActivity.this,
