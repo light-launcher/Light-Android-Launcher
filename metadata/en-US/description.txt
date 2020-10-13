@@ -1,0 +1,1 @@
+Simple, intuitive and lightweight launcher that supports Android 2+
