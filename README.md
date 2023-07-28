@@ -1,8 +1,11 @@
+### This project is no longer actively developed, so I've decided to archive it.
+Feel free to fork the repo as long you fulfill GPL v2 License.
+
 Light Android Launcher
 ======================
 
 Configurable, minimalistic, super lightweight app launcher with a low memory usage and small install size
----------------------------------------------------------------------------------------------------------
+
 
 <p align="center">
   <img src="https://github.com/light-launcher/Light-Android-Launcher/blob/master/preview.gif?raw=true" style="max-height:600px"/>
@@ -34,6 +37,3 @@ One of the goals of the app was to provide smooth experience for older e-paper d
 Free & Open Source
 ==================
 No trackers, no ads, and no device permissions. Open Source Code, available under GPLv2 license.
-   
-### Contribution
-Project was done for my personal usage, but I am aware that some people prefer simplicity and some need low battery drain and processor usage - thats why I decided to share the project. Feel free to contribute.
